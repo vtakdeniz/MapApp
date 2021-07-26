@@ -18,7 +18,7 @@
 
         <style>
             html,body{height:100%;margin: 0px;}
-            #tr_map { height: 100%;margin: 0px; }
+            #tr_map { height: 100%;margin: 0px;}
         </style>
     </head>
 
@@ -26,15 +26,21 @@
         <p>Türkiye Haritası</p>
         <div id="tr_map"></div>
         <script> 
+            var fgroup = new L.featureGroup();
+
+
             var mymap = L.map('tr_map').setView([38.963745, 35.243322], 5);
             const attributions = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             const tileUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
             const tiles = L.tileLayer(tileUrl,{attribution:attributions});
             tiles.addTo(mymap)
             mymap.pm.addControls({position:'topleft'});
-            mymap.on('pm:drawend', e => {
+            mymap.on('pm:create', e => {
             console.log(e);
             console.log(mymap.pm.getGeomanDrawLayers(true).toGeoJSON());
+            fgroup.addLayer(e.layer);
+            console.log(e.layer);
+            console.log(e.layer.toGeoJSON().geometry.coordinates);
             });
             /*L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -45,6 +51,7 @@
                 accessToken: 'your.mapbox.access.token'
             }).addTo(mymap);*/
         </script>
+
     </body>
 
 </html>
