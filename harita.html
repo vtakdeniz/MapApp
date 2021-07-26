@@ -11,6 +11,11 @@
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>
 
+        <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css" />  
+
+        <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>  
+
+
         <style>
             html,body{height:100%;margin: 0px;}
             #tr_map { height: 100%;margin: 0px; }
@@ -20,12 +25,13 @@
     <body>
         <p>Türkiye Haritası</p>
         <div id="tr_map"></div>
-        <script>
+        <script> 
             var mymap = L.map('tr_map').setView([38.963745, 35.243322], 5);
             const attributions = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             const tileUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
             const tiles = L.tileLayer(tileUrl,{attribution:attributions});
             tiles.addTo(mymap)
+            mymap.pm.addControls({position:'topleft'});
             /*L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                 maxZoom: 18,
