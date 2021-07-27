@@ -1,0 +1,20 @@
+/*html,body{height:100vh;margin: 0px;}*/
+#tr_map {
+     height: 80vh;margin: 0px;
+    }
+
+#page-top{
+    background: #83A79C; 
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    padding: 10px;
+    justify-content: space-around;
+}
+
+#name-tag{
+    background-color: yellow;
+    border: 10px;
+    padding: 10px
+}
+
