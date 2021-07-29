@@ -30,7 +30,7 @@
     <body>
         <div background="blue" id="page-top">
             <p id="name-tag">Map of Turkey</p>
-             <button class="btn btn-success" onclick="sendReq()">Send Ajax Request</button>
+            <button class="btn btn-success" onclick="sendReq()">Send Ajax Request</button>
         </div>
         
         <br>
@@ -38,22 +38,58 @@
 
         <script> 
             var fgroup = new L.featureGroup();
+            fgroup.on('click',function(e){
+                let popup = L.popup();
+                popup
+                    .setLatLng(e.latlng)
+                    .setContent("<button onclick='alert(1)'>Add a drawing<button>")
+                    .openOn(mymap);
+                    console.log(e.latlng);
+            } );;
+
+            var markerGroup = new L.featureGroup();
             //l.pm.utils.getLayer
 
             var mymap = L.map('tr_map').setView([38.963745, 35.243322], 5);
             const attributions = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             const tileUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
             const tiles = L.tileLayer(tileUrl,{attribution:attributions});
-            tiles.addTo(mymap)
+            tiles.addTo(mymap);
             mymap.pm.addControls({position:'topleft'});
+
             mymap.on('pm:create', e => {
             //console.log(e);
             //console.log(mymap.pm.getGeomanDrawLayers(true).toGeoJSON());
-            fgroup.addLayer(e.layer);
+            
+            if(e.shape=='Marker'){
+                let popup = L.popup();
+                popup
+                    .setLatLng(e.layer.getLatLng())
+                    .setContent("<button onclick='alert(1)'>Add a branch<button>")
+                    .openOn(mymap);
+
+                    e.layer.on('click', function (e) {
+                            console.log(e);
+                            let popup = L.popup();
+
+                            popup
+                                .setLatLng(e.latlng)
+                                .setContent("<button onclick='alert(1)'>Add a branch<button>")
+                                .openOn(mymap);
+                                console.log(e.latlng);
+                        });
+            }
+            else{
+                fgroup.addLayer(e.layer);
+            }
             //console.log(e.layer);
             //console.log(e.layer.toGeoJSON().geometry.coordinates);
-
             });
+
+
+
+            /*mymap.on('click', onMapClick);*/
+
             /*L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                 maxZoom: 18,
