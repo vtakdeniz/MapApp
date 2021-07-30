@@ -38,14 +38,9 @@
     </head>
 
     <body>
-        <!-- Button trigger modal -->
-        <!-- Button trigger modal <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable">
-            Launch demo modal
-        </button> -->
-        
-        
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    
+        <!-- Modal for branches-->
+        <div class="modal fade" id="branchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -55,41 +50,84 @@
                 </button>
                 </div>
                 <div class="modal-body">
-                    <form id="myForm" >
-                        <label for="br_id">Branch Id:</label>
-                        <input type="text" id="br_id" name="br_id"><br><br>
+                    <form id="branch_form" >
+                        <label for="branch_id">Branch Id:</label>
+                        <input type="text" id="branch_id" name="branch_id"><br><br>
 
-                        <label for="br_name">Branch name:</label>
-                        <input type="text" id="br_name" name="br_name"><br><br>
+                        <label for="branch_name">Branch name:</label>
+                        <input type="text" id="branch_name" name="branch_name"><br><br>
                         
-                        <label for="br_manager">Branch Manager:</label>
-                        <input type="text" id="br_manager" name="br_manager"><br><br>
-                        <!--input type="submit" value="Submit"-->
+                        <label for="branch_manager">Branch Manager:</label>
+                        <input type="text" id="branch_manager" name="branch_manager"><br><br>
+                        
+                        <label for="branch_coord">Branch coordinates:</label>
+                        <input type="text" id="branch_crd" name="branch_crd" readonly><br><br>
                     </form>
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="sendTestFormPost()">Post</button>
+                <button type="button" class="btn btn-secondary" onclick="clearInputFields()" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="sendFormPost('branch_form');clearInputFields()">Post</button>
                 </div>
             </div>
             </div>
         </div>
 
+
+        <!-- Modal for polygons-->
+        <div class="modal fade" id="polygonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle">Add a branch</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <form id="poly_form" >
+                        <label for="poly_id">Poly Id:</label>
+                        <input type="text" id="poly_id" name="poly_id"><br><br>
+
+                        <label for="branch_ids">Branch id:</label>
+                        <select name="branch_id" id="branch_ids">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+
+                        <!--<label for="br_manager">Branch Manager:</label>
+                        <input type="text" id="br_manager" name="br_manager"><br><br>-->
+                        <!--input type="submit" value="Submit"-->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="clearInputFields()" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="sendFormPost('poly_form');clearInputFields()">Post</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+
+
         <div background="blue" id="page-top">
             <p id="name-tag">Map of Turkey</p>
-            <button class="btn btn-success" onclick="sendTestPost()">Send Ajax Request</button>
         </div>
         
         <br>
         <div id="tr_map"></div>
 
         <script> 
+            var markerToGeoMap={};
+            var markerGEO;
+
             var fgroup = new L.featureGroup();
             fgroup.on('click',function(e){
                 let popup = L.popup();
                 popup
                     .setLatLng(e.latlng)
-                    .setContent(`<button onclick='showBranchModal()'>Add a polygon</button>`)
+                    .setContent(`<button onclick='showPolyModal()'>Add a polygon</button>`)
                     .openOn(mymap);
                     console.log(e.latlng);
             } );;
@@ -108,22 +146,28 @@
             //console.log(e);
             //console.log(mymap.pm.getGeomanDrawLayers(true).toGeoJSON());
             
-            if(e.shape=='Marker'){
+            if(e.shape=='Marker'){  
+                //markerToGeoMap[e.layer]=e.layer.getLatLng();
+                markerGEO=e.layer.toGeoJSON().geometry.coordinates;
                 let popup = L.popup();
                 popup
                     .setLatLng(e.layer.getLatLng())
                     .setContent(`<button onclick='showBranchModal()'>Add a branch</button>`)
                     .openOn(mymap);
-
-                    e.layer.on('click', function (e) {
-                            console.log(e);
+                    //markerGEO=e.layer.getLatLng();
+                    e.layer.on('click', function (d) {
+                            let crd=JSON.parse(JSON.stringify(d.latlng))["lng"].toString().substring(0,9) +","+JSON.parse(JSON.stringify(d.latlng))["lat"].toString().substring(0,9) ;
                             let popup = L.popup();
-
+                            markerGEO=crd;
+                            /*for(var key in markerToGeoMap) {
+                                var value = markerToGeoMap[key];
+                                console.log(value);
+                                console.log(key);
+                            }*/
                             popup
-                                .setLatLng(e.latlng)
+                                .setLatLng(d.latlng)
                                 .setContent(`<button onclick='showBranchModal()'>Add a branch</button>`)
                                 .openOn(mymap);
-                                console.log(e.latlng);
                         });
             }
             else{

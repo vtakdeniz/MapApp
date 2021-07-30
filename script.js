@@ -30,8 +30,23 @@ function sendTestPost(){
     postData(inputObj);
 }
 
-function sendTestFormPost(){
-    let formData = document.getElementById("myForm");//$("#myForm");
+function clearInputFields(){
+  var inputs, index;
+
+  inputs = document.getElementsByTagName('input');
+  for (index = 0; index < inputs.length; ++index) {
+      inputs[index].value='';
+  }
+}
+
+function sendFormPost(form_type){
+  let formData;
+    if (form_type=='branch_form'){
+       formData = document.getElementById("branch_form");//$("#myForm");
+    }
+    else{
+       formData = document.getElementById("poly_form")
+    }
     console.log(formData);
     const datax = new FormData(formData);
 
@@ -42,9 +57,10 @@ function sendTestFormPost(){
     console.log(formData);*/
     //ajax call should match the form id
     postData(value);
+    closeBranchModal();
 }
 
-function postRawData(jdata){
+/*function postRawData(jdata){
     $.ajax({
         
             method: "POST",
@@ -55,14 +71,14 @@ function postRawData(jdata){
           xhr.overrideMimeType( "application/json;" );
         }
       })
-}
+}*/
 
 function postData(jdata){
     jsondata=JSON.stringify(jdata);
     $.ajax({
         
             method: "POST",
-            url: "http://localhost:9104",
+            url: "http://localhost:9106",
             data: jsondata 
           ,
         beforeSend: function( xhr ) {
