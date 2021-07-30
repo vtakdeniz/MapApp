@@ -18,7 +18,7 @@
 
         <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.min.js"></script>  
 
-        <script src="script.js"></script>  
+
 
         <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
@@ -31,38 +31,48 @@
 
         
         <link rel="stylesheet" href="style.css"/>
-        
+        <script src="script.js"></script>  
+        <script src="modelhandler.js"></script>  
+
+
     </head>
 
     <body>
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Launch demo modal
-  </button>
-  
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable">
+            Launch demo modal
+        </button>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <form id="#myForm" >
+                        <label for="fname">First name:</label>
+                        <input type="text" id="fname" name="fname"><br><br>
+                        <label for="lname">Last name:</label>
+                        <input type="text" id="lname" name="lname"><br><br>
+                        <input type="submit" value="Submit">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="sendTestFormPost()">Post</button>
+                </div>
+            </div>
+            </div>
         </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
+
         <div background="blue" id="page-top">
             <p id="name-tag">Map of Turkey</p>
-            <button class="btn btn-success" onclick="sendReq()">Send Ajax Request</button>
+            <button class="btn btn-success" onclick="sendTestPost()">Send Ajax Request</button>
         </div>
         
         <br>
@@ -74,7 +84,7 @@
                 let popup = L.popup();
                 popup
                     .setLatLng(e.latlng)
-                    .setContent("<button onclick='alert(1)'>Add a drawing<button>")
+                    .setContent(`<button onclick='showModal()'>Add a polygon</button>`)
                     .openOn(mymap);
                     console.log(e.latlng);
             } );;
@@ -97,7 +107,7 @@
                 let popup = L.popup();
                 popup
                     .setLatLng(e.layer.getLatLng())
-                    .setContent("<button onclick='alert(1)'>Add a branch<button>")
+                    .setContent(`<button onclick='showModal()'>Add a branch</button>`)
                     .openOn(mymap);
 
                     e.layer.on('click', function (e) {
@@ -106,7 +116,7 @@
 
                             popup
                                 .setLatLng(e.latlng)
-                                .setContent("<button onclick='alert(1)'>Add a branch<button>")
+                                .setContent(`<button onclick='showModal()'>Add a branch</button>`)
                                 .openOn(mymap);
                                 console.log(e.latlng);
                         });

@@ -1,4 +1,7 @@
-function sendReq(){
+
+var formData = JSON.stringify($("#myForm").serializeArray());
+
+function sendTestPost(){
     var inputObj = {};
     var geo = {};
     var testPolygon = []; 
@@ -27,6 +30,23 @@ function sendReq(){
     postData(inputObj);
 }
 
+function sendTestFormPost(){
+    var formData = JSON.stringify($("#myForm").serializeArray());
+    postRawData(formData);
+}
+
+function postRawData(jdata){
+    $.ajax({
+        
+            method: "POST",
+            url: "http://localhost:9096",
+            data: jdata 
+          ,
+        beforeSend: function( xhr ) {
+          xhr.overrideMimeType( "application/json;" );
+        }
+      })
+}
 
 function postData(jdata){
     jsondata=JSON.stringify(jdata);
