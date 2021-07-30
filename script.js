@@ -1,5 +1,5 @@
 
-var formData = JSON.stringify($("#myForm").serializeArray());
+
 
 function sendTestPost(){
     var inputObj = {};
@@ -31,15 +31,24 @@ function sendTestPost(){
 }
 
 function sendTestFormPost(){
-    var formData = JSON.stringify($("#myForm").serializeArray());
-    postRawData(formData);
+    let formData = document.getElementById("myForm");//$("#myForm");
+    console.log(formData);
+    const datax = new FormData(formData);
+
+    const value = Object.fromEntries(datax.entries());
+    
+    console.log({ value });
+    /*JSON.stringify( .serializeArray());
+    console.log(formData);*/
+    //ajax call should match the form id
+    postData(value);
 }
 
 function postRawData(jdata){
     $.ajax({
         
             method: "POST",
-            url: "http://localhost:9096",
+            url: "http://localhost:9103",
             data: jdata 
           ,
         beforeSend: function( xhr ) {
@@ -53,7 +62,7 @@ function postData(jdata){
     $.ajax({
         
             method: "POST",
-            url: "http://localhost:9095",
+            url: "http://localhost:9104",
             data: jsondata 
           ,
         beforeSend: function( xhr ) {

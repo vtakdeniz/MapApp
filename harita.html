@@ -24,7 +24,7 @@
 
 
 
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -39,27 +39,32 @@
 
     <body>
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable">
+        <!-- Button trigger modal <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable">
             Launch demo modal
-        </button>
+        </button> -->
+        
         
         <!-- Modal -->
         <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalScrollableTitle">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalScrollableTitle">Add a branch</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 </div>
                 <div class="modal-body">
-                    <form id="#myForm" >
-                        <label for="fname">First name:</label>
-                        <input type="text" id="fname" name="fname"><br><br>
-                        <label for="lname">Last name:</label>
-                        <input type="text" id="lname" name="lname"><br><br>
-                        <input type="submit" value="Submit">
+                    <form id="myForm" >
+                        <label for="br_id">Branch Id:</label>
+                        <input type="text" id="br_id" name="br_id"><br><br>
+
+                        <label for="br_name">Branch name:</label>
+                        <input type="text" id="br_name" name="br_name"><br><br>
+                        
+                        <label for="br_manager">Branch Manager:</label>
+                        <input type="text" id="br_manager" name="br_manager"><br><br>
+                        <!--input type="submit" value="Submit"-->
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -84,7 +89,7 @@
                 let popup = L.popup();
                 popup
                     .setLatLng(e.latlng)
-                    .setContent(`<button onclick='showModal()'>Add a polygon</button>`)
+                    .setContent(`<button onclick='showBranchModal()'>Add a polygon</button>`)
                     .openOn(mymap);
                     console.log(e.latlng);
             } );;
@@ -107,7 +112,7 @@
                 let popup = L.popup();
                 popup
                     .setLatLng(e.layer.getLatLng())
-                    .setContent(`<button onclick='showModal()'>Add a branch</button>`)
+                    .setContent(`<button onclick='showBranchModal()'>Add a branch</button>`)
                     .openOn(mymap);
 
                     e.layer.on('click', function (e) {
@@ -116,7 +121,7 @@
 
                             popup
                                 .setLatLng(e.latlng)
-                                .setContent(`<button onclick='showModal()'>Add a branch</button>`)
+                                .setContent(`<button onclick='showBranchModal()'>Add a branch</button>`)
                                 .openOn(mymap);
                                 console.log(e.latlng);
                         });

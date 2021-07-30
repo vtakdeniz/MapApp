@@ -1,3 +1,3 @@
-function showModal(){
+function showBranchModal(){
   $('#exampleModalScrollable').modal('show');
 }
