@@ -1,5 +1,7 @@
 package-lock.json
 
+redundant/
+
 node_modules/
 
 open

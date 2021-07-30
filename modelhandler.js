@@ -12,7 +12,7 @@ function showPolyModal(){
   $('#polygonModal').modal('show');
 }
 
-function closePOlyModal(){
+function closePolyModal(){
   $('#polygonModal').modal('hide');
 }
 
