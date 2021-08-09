@@ -1,7 +1,7 @@
 
 
 
-function sendTestPost(){
+function fetchCoordinates(){
     var inputObj = {};
     var geo = {};
     var testPolygon = []; 
@@ -11,7 +11,7 @@ function sendTestPost(){
             //console.log("Feature");
             layer.remove();
             fgroup.removeLayer(layer);
-            console.log(layer.toGeoJSON().geometry.coordinates); 
+            //console.log(layer.toGeoJSON().geometry.coordinates); 
             testPolygon.push(layer.toGeoJSON().geometry.coordinates);
         } 
     });
@@ -27,7 +27,7 @@ function sendTestPost(){
         inputObj.GeoMultipoly = geo;
     }
 
-    postData(inputObj);
+    return inputObj;
 }
 
 function clearInputFields(){
@@ -49,32 +49,23 @@ function sendFormPost(form_type){
        formData = document.getElementById("poly_form");
        closePolyModal();
     }
-    const datax = new FormData(formData);
-    const value = Object.fromEntries(datax.entries());
+    let datax = new FormData(formData);
+    let value = Object.fromEntries(datax.entries());
+    let coord = fetchCoordinates();
+    let finalObj = $.extend(value,coord);
     //ajax call should match the form id
-    postData(value);
+    console.log(finalObj);
+    postData(finalObj);
     clearInputFields();
 }
 
-/*function postRawData(jdata){
-    $.ajax({
-        
-            method: "POST",
-            url: "http://localhost:9103",
-            data: jdata 
-          ,
-        beforeSend: function( xhr ) {
-          xhr.overrideMimeType( "application/json;" );
-        }
-      })
-}*/
 
 function postData(jdata){
     jsondata=JSON.stringify(jdata);
     $.ajax({
         
             method: "POST",
-            url: "http://localhost:9108",
+            url: "http://localhost:8080",
             data: jsondata 
           ,
         beforeSend: function( xhr ) {
