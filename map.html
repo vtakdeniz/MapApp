@@ -85,8 +85,9 @@
                 </div>
                 <div class="modal-body">
                     <form id="poly_form" >
+                        <!-- Modal for polygons
                         <label for="poly_id">Poly Id:</label>
-                        <input type="text" id="poly_id" name="poly_id"><br><br>
+                        <input type="text" id="poly_id" name="poly_id"><br><br>-->
 
                         <label for="branch_ids">Branch id:</label>
                         <select name="branch_id" id="branch_ids">
@@ -126,7 +127,7 @@
                     .setLatLng(e.latlng)
                     .setContent(`<button onclick='showPolyModal()'>Add a polygon</button>`)
                     .openOn(mymap);
-                    console.log(e.latlng);
+                    //console.log(e.latlng);
             } );;
 
             var markerGroup = new L.featureGroup();

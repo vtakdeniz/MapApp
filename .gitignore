@@ -8,3 +8,12 @@ open
 
 temp_code.js
 
+/ASPDotnet_Backend/mapService/mapService/*.json
+
+/ASPDotnet_Backend/mapService/mapService/bin/
+
+/ASPDotnet_Backend/mapService/mapService/obj/
+
+/ASPDotnet_Backend/mapService/mapService/Properties
+
+/ASPDotnet_Backend/mapService/mapService/mapService.csproj

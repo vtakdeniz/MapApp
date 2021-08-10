@@ -1,7 +1,7 @@
 
 
 
-function fetchCoordinates(){
+function fetchPoly(){
     var inputObj = {};
     var geo = {};
     var testPolygon = []; 
@@ -40,37 +40,53 @@ function clearInputFields(){
 }
 
 function sendFormPost(form_type){
-  let formData;
+    let url;
+    let formData = document.getElementById(form_type);
+    let finalObj;
+  /*
     if (form_type=='branch_form'){
        formData = document.getElementById("branch_form");
-       closeBranchModal();
+       
     }
     else{
        formData = document.getElementById("poly_form");
-       closePolyModal();
-    }
+       
+    }*/
     let datax = new FormData(formData);
     let value = Object.fromEntries(datax.entries());
-    let coord = fetchCoordinates();
-    let finalObj = $.extend(value,coord);
+
+    if (form_type=='branch_form'){
+      url="Branch";
+      formData = document.getElementById("branch_form");
+      value["branch_crd"]=value["branch_crd"].split(",").map(Number);
+      finalObj=value;
+      closeBranchModal();
+   }
+   else{
+      url="Polygon";
+      formData = document.getElementById("poly_form");
+      let poly_cord = fetchPoly();
+      finalObj = $.extend(value,poly_cord);
+      closePolyModal();
+   }
+    
     //ajax call should match the form id
-    console.log(finalObj);
-    postData(finalObj);
+    console.log(JSON.stringify(finalObj));
+    postData(finalObj,url);
     clearInputFields();
-}
+    
+  }
 
 
-function postData(jdata){
+function postData(jdata,url){
     jsondata=JSON.stringify(jdata);
     $.ajax({
         
             method: "POST",
-            url: "http://localhost:8080",
-            data: jsondata 
-          ,
-        beforeSend: function( xhr ) {
-          xhr.overrideMimeType( "application/json;" );
-        }
+            url: "https://localhost:5001/"+url,
+            data: jsondata ,
+            contentType:'application/json'
+          
       })
 }
 

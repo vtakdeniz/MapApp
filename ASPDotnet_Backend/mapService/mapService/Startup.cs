@@ -13,6 +13,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using mapService.Models;
 using Microsoft.Extensions.Options;
+using mapService.Controllers;
+using mapService.DBConfig;
+using mapService.Services;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace mapService
 {
@@ -28,11 +33,12 @@ namespace mapService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IDbClient,DbClient>();
             services.Configure<mapServiceDatabaseSettings>(
-            Configuration.GetSection(nameof(mapServiceDatabaseSettings)));
+                    Configuration.GetSection(nameof(mapServiceDatabaseSettings)));
+            services.AddTransient<IBranchServices, BranchServices>();
+            services.AddTransient<IPolygonServices, PolygonServices>();
 
-            services.AddSingleton<ImapServiceDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<mapServiceDatabaseSettings>>().Value);
             services.AddControllers();
 
         }
@@ -40,12 +46,11 @@ namespace mapService
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "mapService v1"));
-            }
+            app.UseCors(x => x
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .SetIsOriginAllowed(origin => true) // allow any origin
+              .AllowCredentials()); // allow credentials
 
             app.UseHttpsRedirection();
 

@@ -1,5 +1,4 @@
-function showBranchModal(test){
-  console.log("test test "+test);
+function showBranchModal(){
   $('#branchModal').modal('show');
   document.getElementById('branch_crd').value=markerGEO;
 }

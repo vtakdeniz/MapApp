@@ -7,7 +7,7 @@ namespace mapService.Models
     public class GeoPoly
     {
         public string type { get; set; }
-        public double[][][] coordinates { get; set; }
+        public double[][][][] coordinates { get; set; }
     }
 
     public class GeoMultipoly
@@ -15,12 +15,14 @@ namespace mapService.Models
         public string type { get; set; }
         public double[][][][] coordinates { get; set; }
     }
+
     public class InputObj
     {
         [BsonId]
-        public int Id { get; set; }
+        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+        public string Id { get; set; }
         public int branch_id { get; set; }
-        public GeoMultipoly Geo { get; set; }
+        public GeoMultipoly GeoMultipoly { get; set; }
         public GeoPoly GeoPoly { get; set; }
     }
 }
