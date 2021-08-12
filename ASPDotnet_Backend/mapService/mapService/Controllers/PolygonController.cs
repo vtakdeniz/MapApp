@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using mapService.Services;
 using mapService.Models;
+using System.Collections.Generic;
+using MongoDB.Bson;
+using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace mapService.Controllers
 {
@@ -18,18 +22,22 @@ namespace mapService.Controllers
 
         [HttpGet]
         public IActionResult GetPolygons() {
-            return Ok(_polygonServices.GetPolygons());
+            List<BsonDocument> docs = _polygonServices.GetPolygons();
+            //BsonDocument docs = _polygonServices.GetPolygons();
+            //HttpContext.Response.Headers["Content-Type"] = "application/json;charset=utf-8";
+            return Ok(docs);
         }
 
         [HttpGet("{id}", Name = "GetPolygon")]
-        public IActionResult GetPolygon(string id) {
+        public IActionResult GetPolygon(int id) {
             return Ok(_polygonServices.GetPolygon(id));
         }
 
         [HttpPost]
-        public IActionResult AddPolygon(InputObj inputObj) {
+        public IActionResult AddPolygon(PolygonDto inputObj) {
+            
             _polygonServices.AddPolygon(inputObj);
-            return CreatedAtRoute("GetPolygon", new { Id=inputObj.Id},inputObj);
+            return Ok();
         }
     }
 }

@@ -18,7 +18,7 @@ using mapService.DBConfig;
 using mapService.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-
+using mapService.Utils;
 namespace mapService
 {
     public class Startup
@@ -33,13 +33,20 @@ namespace mapService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers(options => {
+
+                // Support for BsonDocument
+                options.OutputFormatters.Insert(0, new BsonDocumentOutputFormatter());
+                options.InputFormatters.Insert(0, new BsonDocumentInputFormatter());
+
+            });
             services.AddSingleton<IDbClient,DbClient>();
             services.Configure<mapServiceDatabaseSettings>(
                     Configuration.GetSection(nameof(mapServiceDatabaseSettings)));
             services.AddTransient<IBranchServices, BranchServices>();
-            services.AddTransient<IPolygonServices, PolygonServices>();
+            _ = services.AddTransient<IPolygonServices, PolygonServices>();
 
-            services.AddControllers();
+            //services.AddControllers();
 
         }
 

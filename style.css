@@ -9,7 +9,7 @@
     flex-wrap: wrap;
     flex-direction: row;
     padding: 10px;
-    justify-content: space-around;
+    justify-content: right;
 }
 
 #name-tag{
@@ -18,3 +18,10 @@
     padding: 10px
 }
 
+#get-poly-bybranchid{
+    width: 60%;
+}
+
+.get-branch-layer + form{
+    margin: 10px;
+}

@@ -60,8 +60,8 @@
                         <label for="branch_manager">Branch Manager:</label>
                         <input type="text" id="branch_manager" name="branch_manager"><br><br>
                         
-                        <label for="branch_coord">Branch coordinates:</label>
-                        <input type="text" id="branch_crd" name="branch_crd" readonly><br><br>
+                        <label for="Geo">Branch coordinates:</label>
+                        <input type="text" id="branch_crd" name="Geo" readonly><br><br>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -84,13 +84,13 @@
                 </button>
                 </div>
                 <div class="modal-body">
-                    <form id="poly_form" >
+                    <form class="branch_id_form" id="poly_form" >
                         <!-- Modal for polygons
                         <label for="poly_id">Poly Id:</label>
                         <input type="text" id="poly_id" name="poly_id"><br><br>-->
 
-                        <label for="branch_ids">Branch id:</label>
-                        <select name="branch_id" id="branch_ids">
+                        <label for="branch_id_list">Branch id:</label>
+                        <select name="branch_id" id="branch_id_list">
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -109,8 +109,58 @@
 
 
 
-        <div background="blue" id="page-top">
-            <p id="name-tag">Map of Turkey</p>
+        <div background="red" id="page-top">
+            <!--p id="name-tag">Map of Turkey</p-->
+            
+            <!--navbar-->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#">Search for layers</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+              
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <!--li class="nav-item">
+                      <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                      </div>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link disabled" href="#">Disabled</a>
+                    </li-->
+                  </ul>
+                  <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                  </form>
+                </div>
+              </nav>
+           <!--div class="get-branch-layer">
+                <button id="get-poly-bybranchid" class="btn btn-secondary">Get the fields with given branch id</button>
+                <form class="branch_id_form" id="branch_ids" >
+                    <label for="branch_ids">Branch id:</label>
+                    <select name="branch_id" id="div_branch_id_form">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+
+                </form>
+           </div-->
         </div>
         
         <br>
@@ -145,7 +195,6 @@
             //console.log(mymap.pm.getGeomanDrawLayers(true).toGeoJSON());
             
             if(e.shape=='Marker'){  
-                //markerToGeoMap[e.layer]=e.layer.getLatLng();
                 markerGEO=e.layer.toGeoJSON().geometry.coordinates;
                 let popup = L.popup();
                 popup
@@ -157,11 +206,6 @@
                             let crd=JSON.parse(JSON.stringify(d.latlng))["lng"].toString().substring(0,9) +","+JSON.parse(JSON.stringify(d.latlng))["lat"].toString().substring(0,9) ;
                             let popup = L.popup();
                             markerGEO=crd;
-                            /*for(var key in markerToGeoMap) {
-                                var value = markerToGeoMap[key];
-                                console.log(value);
-                                console.log(key);
-                            }*/
                             popup
                                 .setLatLng(d.latlng)
                                 .setContent(`<button onclick='showBranchModal()'>Add a branch</button>`)
@@ -171,8 +215,6 @@
             else{
                 fgroup.addLayer(e.layer);
             }
-            //console.log(e.layer);
-            //console.log(e.layer.toGeoJSON().geometry.coordinates);
             });
 
 

@@ -1,15 +1,17 @@
 ﻿using System;
 using mapService.Models;
 using System.Collections.Generic;
+using MongoDB.Bson;
+using System.Threading.Tasks;
 
 namespace mapService.Services
 {
     public interface IPolygonServices
     {
-        List<InputObj> GetPolygons();
-        InputObj AddPolygon(InputObj inputObj);
-        InputObj GetPolygon(string id);
+        List<BsonDocument> GetPolygons();
+        PolygonDto AddPolygon(PolygonDto inputObj);
+        BsonDocument GetPolygon(int id);
         void DeletePolygon(string id);
-        InputObj UpdatePolygon(InputObj inputObj);
+        //BsonDocument UpdatePolygon(PolygonDto inputObj);*/
     }
 }

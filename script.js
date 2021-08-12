@@ -11,6 +11,7 @@ function fetchPoly(){
             //console.log("Feature");
             layer.remove();
             fgroup.removeLayer(layer);
+            console.log(layer);
             //console.log(layer.toGeoJSON().geometry.coordinates); 
             testPolygon.push(layer.toGeoJSON().geometry.coordinates);
         } 
@@ -43,23 +44,16 @@ function sendFormPost(form_type){
     let url;
     let formData = document.getElementById(form_type);
     let finalObj;
-  /*
-    if (form_type=='branch_form'){
-       formData = document.getElementById("branch_form");
-       
-    }
-    else{
-       formData = document.getElementById("poly_form");
-       
-    }*/
     let datax = new FormData(formData);
     let value = Object.fromEntries(datax.entries());
 
     if (form_type=='branch_form'){
+      let geoObj={"type":"Point","coordinates":value["Geo"].split(",").map(Number)};
       url="Branch";
       formData = document.getElementById("branch_form");
-      value["branch_crd"]=value["branch_crd"].split(",").map(Number);
+      value["Geo"]=geoObj;//value["branch_crd"].split(",").map(Number);
       finalObj=value;
+      console.log(finalObj);
       closeBranchModal();
    }
    else{
