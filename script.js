@@ -1,3 +1,68 @@
+var markerToGeoMap={};
+var markerGEO;
+
+var fgroup = new L.featureGroup();
+fgroup.on('click',function(e){
+    let popup = L.popup();
+    popup
+        .setLatLng(e.latlng)
+        .setContent(`<button onclick='showPolyModal()'>Add a polygon</button>`)
+        .openOn(mymap);
+        //console.log(e.latlng);
+} );;
+
+var markerGroup = new L.featureGroup();
+//l.pm.utils.getLayer
+
+var mymap = L.map('tr_map').setView([38.963745, 35.243322], 5);
+const attributions = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+const tileUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const tiles = L.tileLayer(tileUrl,{attribution:attributions});
+tiles.addTo(mymap);
+mymap.pm.addControls({position:'topleft'});
+
+mymap.on('pm:create', e => {
+//console.log(e);
+//console.log(mymap.pm.getGeomanDrawLayers(true).toGeoJSON());
+
+if(e.shape=='Marker'){  
+    markerGEO=e.layer.toGeoJSON().geometry.coordinates;
+    let popup = L.popup();
+    popup
+        .setLatLng(e.layer.getLatLng())
+        .setContent(`<button onclick='showBranchModal()'>Add a branch</button>`)
+        .openOn(mymap);
+        //markerGEO=e.layer.getLatLng();
+        e.layer.on('click', function (d) {
+                let crd=JSON.parse(JSON.stringify(d.latlng))["lng"].toString().substring(0,9) +","+JSON.parse(JSON.stringify(d.latlng))["lat"].toString().substring(0,9) ;
+                let popup = L.popup();
+                markerGEO=crd;
+                popup
+                    .setLatLng(d.latlng)
+                    .setContent(`<button onclick='showBranchModal()'>Add a branch</button>`)
+                    .openOn(mymap);
+            });
+}
+else{
+    fgroup.addLayer(e.layer);
+}
+});
+
+
+
+
+
+/*mymap.on('click', onMapClick);*/
+
+/*L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: 'your.mapbox.access.token'
+}).addTo(mymap);*/
+
 
 var dbPolyGroup = new L.featureGroup();
 
@@ -108,7 +173,7 @@ function sendFormPost(form_type){
       let geoObj={"type":"Point","coordinates":value["Geo"].split(",").map(Number)};
       url=url=apiRoutes.Branches.branchBase;
       formData = document.getElementById("branch_form");
-      value["Geo"]=geoObj;//value["branch_crd"].split(",").map(Number);
+      value["Geo"]=geoObj;
       finalObj=value;
       console.log(finalObj);
       closeBranchModal();
