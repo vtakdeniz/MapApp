@@ -31,6 +31,7 @@
 
         
         <link rel="stylesheet" href="style.css"/>
+        <script src="util.js"></script>  
         <script src="script.js"></script>  
         <script src="modelhandler.js"></script>  
 
@@ -52,16 +53,16 @@
                 <div class="modal-body">
                     <form id="branch_form" >
                         <label for="branch_id">Branch Id:</label>
-                        <input type="text" id="branch_id" name="branch_id"><br><br>
+                        <input class="modal-input" type="text" id="branch_id" name="branch_id"><br><br>
 
                         <label for="branch_name">Branch name:</label>
-                        <input type="text" id="branch_name" name="branch_name"><br><br>
+                        <input class="modal-input" type="text" id="branch_name" name="branch_name"><br><br>
                         
                         <label for="branch_manager">Branch Manager:</label>
-                        <input type="text" id="branch_manager" name="branch_manager"><br><br>
+                        <input class="modal-input" type="text" id="branch_manager" name="branch_manager"><br><br>
                         
                         <label for="Geo">Branch coordinates:</label>
-                        <input type="text" id="branch_crd" name="Geo" readonly><br><br>
+                        <input class="modal-input" type="text" id="branch_crd" name="Geo" readonly><br><br>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -89,7 +90,7 @@
                         <label for="poly_id">Poly Id:</label>
                         <input type="text" id="poly_id" name="poly_id"><br><br>-->
 
-                        <label for="branch_id_list">Branch id:</label>
+                        <label class="modal-input" for="branch_id_list">Branch id:</label>
                         <select class="branch-id-selector" name="branch_id" id="branch_id_list">
 
                         </select>

@@ -8,13 +8,14 @@ function getBranchOnMap(){
             dbPolyGroup.removeLayer(layer);
         } 
     });
+    clearColorHistory();
     let checkboxValues=[];
     let checkboxList = $(".branchid-checkbox");
     //console.log(checkboxList);
     for(let i=0; checkboxList[i]; ++i){
-        /*console.log(i);
-        console.log(checkboxList[i].value);
-        console.log(checkboxList[i].checked);*/
+        //console.log(i);
+        console.log(checkboxList[i]);
+        //console.log(checkboxList[i].checked);
         if(checkboxList[i].checked){
             checkboxValues.push(checkboxList[i].value);
             //apiRoutes.Branches.getBranchesById
@@ -31,30 +32,32 @@ function getBranchOnMap(){
       for(let i=0; datax[i]; ++i){
             let polygon =datax[i].Geo.coordinates;
             if(datax[i].Geo.type=="Polygon"){
-                drawPolygon(polygon);
+                let col = randomColor();
+                drawPolygon(polygon,col);
             }
             else if(datax[i].Geo.type=="MultiPolygon"){
+                let col = randomColor();
                 for (let j = 0; j < polygon.length; j++) {
-                    drawPolygon(polygon[j]);
+                    drawPolygon(polygon[j],col);
                 }
             }
         }
   });
 }
 
-function drawPolygon(coords){
+function drawPolygon(coords,col){
     let temporaryCoords = [];
     for (let k = 0; k < coords[0].length; k++) {
         temporaryCoords.push(coords[0][k].reverse());
     } 
     let polygon = L.polygon([coords],
         {
-        color: 'red',
-        fillColor: '#f03',
+        color: col,
         fillOpacity: 0.5,
         }).addTo(mymap);
     dbPolyGroup.addLayer(polygon);
 }
+
 
 function fetchPoly(){
     var inputObj = {};
@@ -88,7 +91,7 @@ function fetchPoly(){
 function clearInputFields(){
   let inputs, index;
 
-  inputs = document.getElementsByTagName('input');
+  inputs = document.getElementsByClassName('modal-input');
   for (index = 0; index < inputs.length; ++index) {
       inputs[index].value='';
   }
@@ -128,6 +131,7 @@ function sendFormPost(form_type){
 
 function postData(jdata,urlx){
     jsondata=JSON.stringify(jdata);
+    console.log(jdata);
     $.ajax({
         
             method: "POST",
