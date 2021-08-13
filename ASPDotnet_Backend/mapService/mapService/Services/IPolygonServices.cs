@@ -12,6 +12,7 @@ namespace mapService.Services
         PolygonDto AddPolygon(PolygonDto inputObj);
         BsonDocument GetPolygon(int id);
         void DeletePolygon(string id);
+        List<BsonDocument> getSelectedPolygons(List<int> idList);
         //BsonDocument UpdatePolygon(PolygonDto inputObj);*/
     }
 }

@@ -30,21 +30,11 @@ namespace mapService.Models
         public string Id { get; set; }
         public int branch_id { get; set; }
 
-        //[BsonIgnoreIfNull]
         public GeoMultipoly GeoMultipoly { get; set; }
         
-        //[BsonIgnoreIfNull]
         public GeoPoly GeoPoly { get; set; }
  
     }
 
-    public class Polygon    
-    {
-        [BsonId]
-        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public string Id { get; set; }
-        public int branch_id { get; set; }
-        public Geo Geo { get; set; }
-    }
 }
 

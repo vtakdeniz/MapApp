@@ -12,5 +12,6 @@ namespace mapService.Services
         Branch GetBranch(int id);
         void DeleteBranch(int id);
         Branch UpdateBranch(Branch branch);
+        List<int> getBranchIdList();
     }
 }

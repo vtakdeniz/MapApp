@@ -21,7 +21,10 @@ namespace mapService.Utils
 
         protected override bool CanWriteType(Type type)
         {
-            return base.CanWriteType(type) ;
+            if ((type==typeof(BsonDocument))||type==typeof(List<BsonDocument>)) {
+                return base.CanWriteType(type);
+            }
+            return false;
         }
 
         public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)

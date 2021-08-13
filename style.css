@@ -1,15 +1,13 @@
 /*html,body{height:100vh;margin: 0px;}*/
 #tr_map {
-     height: 85vh;margin: 0px;
+     height: 85vh;
+     margin: 0px;
+     width: 170vh;
+     margin: 0 auto;
     }
 
 #page-top{
-    background: #83A79C; 
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    padding: 10px;
-    justify-content: right;
+    background-color: lightblue;
 }
 
 #name-tag{
@@ -25,3 +23,12 @@
 .get-branch-layer + form{
     margin: 10px;
 }
+
+.navbar-element{
+    margin:10px;
+    border: 5px solid blue;
+    border-radius: 25px;
+    padding:15px;
+}
+
+.checkbox-container { border:2px solid #ccc; padding : 10px; width:300px; height: 100px; overflow-y: scroll; margin: 0 auto;}

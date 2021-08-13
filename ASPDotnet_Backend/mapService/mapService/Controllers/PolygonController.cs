@@ -23,8 +23,6 @@ namespace mapService.Controllers
         [HttpGet]
         public IActionResult GetPolygons() {
             List<BsonDocument> docs = _polygonServices.GetPolygons();
-            //BsonDocument docs = _polygonServices.GetPolygons();
-            //HttpContext.Response.Headers["Content-Type"] = "application/json;charset=utf-8";
             return Ok(docs);
         }
 
@@ -35,9 +33,17 @@ namespace mapService.Controllers
 
         [HttpPost]
         public IActionResult AddPolygon(PolygonDto inputObj) {
-            
             _polygonServices.AddPolygon(inputObj);
             return Ok();
+        }
+
+
+        [HttpPost("GetSelectedPolygons")]
+        public IActionResult GetSelectedPolygons(List<int> idList)
+        {
+            var polys = _polygonServices.getSelectedPolygons(idList);
+
+            return Ok(polys);
         }
     }
 }

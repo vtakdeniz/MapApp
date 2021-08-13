@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using mapService.Models;
 using MongoDB.Driver;
 using mapService.DBConfig;
+using MongoDB.Bson;
 
 namespace mapService.Services
 {
@@ -28,7 +29,22 @@ namespace mapService.Services
 
         public Branch GetBranch(int id)
         {
-            return _branchs.Find(branch => branch.branch_id == id).First();
+            var resList = _branchs.Find(branch => branch.branch_id == id);
+            Branch result;
+            if (resList.Count() != 0)
+            {
+                result = resList.First();
+                return result;
+            }
+            else return null;
+        }
+
+        public List<int> getBranchIdList() {
+            List<int> ids = new List<int>();
+            foreach (Branch branch in _branchs.Find(branch => true).ToList()) {
+                ids.Add(branch.branch_id);
+            };
+            return ids;
         }
 
         public List<Branch> GetBranchs()

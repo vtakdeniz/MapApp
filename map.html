@@ -78,7 +78,7 @@
             <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalScrollableTitle">Add a branch</h5>
+                <h5 class="modal-title" id="Modal-scrollable">Add a branch</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -90,11 +90,8 @@
                         <input type="text" id="poly_id" name="poly_id"><br><br>-->
 
                         <label for="branch_id_list">Branch id:</label>
-                        <select name="branch_id" id="branch_id_list">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
+                        <select class="branch-id-selector" name="branch_id" id="branch_id_list">
+
                         </select>
 
                     </form>
@@ -109,9 +106,8 @@
 
 
 
-        <div background="red" id="page-top">
             <!--p id="name-tag">Map of Turkey</p-->
-            
+        <div id="page-top">
             <!--navbar-->
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <a class="navbar-brand" href="#">Search for layers</a>
@@ -120,34 +116,47 @@
                 </button>
               
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                      <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <!--li class="nav-item">
-                      <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown
-                      </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                      </div>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link disabled" href="#">Disabled</a>
-                    </li-->
-                  </ul>
-                  <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                  </form>
+                  <div class="navbar-element">
+                    <ul class="navbar-nav mr-auto">
+                        <li>
+                            <!--form class="branch_id_form" id="select-branchid-navbar-form">
+                                <label for="branch_id">Select one or multiple branch id</label>
+                                <select multiple class="form-control branch-id-selector" name="branch_id" id="select-branchid-navbar"> </select>
+                            </form--> 
+                            <div class="checkbox-container">
+                                <!--input class="checkbox-id" name="test" type="checkbox" /> This is checkbox <br />
+                                <label class="form-check-label" for="test">1</label>
+                                <input type="checkbox" /> This is checkbox <br />
+                                <input class="form-check-input" name="pomp" type="checkbox" id="inlineCheckbox1" value="option1"-->
+                                
+                            </div>
+                          <br>
+                          <button margin="10px" class="btn btn-outline-success my-2 my-sm-0" onclick="getBranchOnMap()" type="submit">Search</button>
+                        </li>
+                      <!--li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                      </li>
+                      <li class="nav-item dropdown"-->
+                        <!--a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Dropdown
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <a class="dropdown-item" href="#">Action</a>
+                          <a class="dropdown-item" href="#">Another action</a>
+                          <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                      </li-->
+                      <!--li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                      </li-->
+                    </ul>
+                  </div>
                 </div>
-              </nav>
+            </nav>
            <!--div class="get-branch-layer">
                 <button id="get-poly-bybranchid" class="btn btn-secondary">Get the fields with given branch id</button>
                 <form class="branch_id_form" id="branch_ids" >
@@ -161,7 +170,7 @@
 
                 </form>
            </div-->
-        </div>
+        </div>    
         
         <br>
         <div id="tr_map"></div>
@@ -216,6 +225,8 @@
                 fgroup.addLayer(e.layer);
             }
             });
+
+          
 
 
 

@@ -1,5 +1,5 @@
 ﻿<Properties StartupConfiguration="{96504D4A-EED6-408A-96AD-D773DFE73FFE}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="mapService/Utils/BsonDocumentOutputFormatter.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="mapService/appsettings.json">
     <Files>
       <File FileName="mapService/appsettings.json" Line="2" Column="34" />
       <File FileName="mapService/Properties/launchSettings.json" />
@@ -9,7 +9,7 @@
       <File FileName="mapService/Controllers/branchController.cs" />
       <File FileName="mapService/Program.cs" />
       <File FileName="mapService/Services/IPolygonServices.cs" />
-      <File FileName="mapService/Services/PolygonServices.cs" Line="29" Column="45" />
+      <File FileName="mapService/Services/PolygonServices.cs" />
       <File FileName="mapService/Services/BranchServices.cs" />
       <File FileName="mapService/DBConfig/DbClient.cs" />
       <File FileName="mapService/DBConfig/IDbClient.cs" />
@@ -17,7 +17,7 @@
       <File FileName="mapService/DBConfig/mapServiceDatabaseSettings.cs" />
       <File FileName="mapService/Services/IBranchServices.cs" />
       <File FileName="mapService/Utils/BsonDocumentInputFormatter.cs" />
-      <File FileName="mapService/Utils/BsonDocumentOutputFormatter.cs" Line="23" Column="39" />
+      <File FileName="mapService/Utils/BsonDocumentOutputFormatter.cs" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -25,10 +25,11 @@
           <Node name="mapService" expanded="True">
             <Node name="mapService" expanded="True">
               <Node name="Controllers" expanded="True" />
+              <Node name="DBConfig" expanded="True" />
+              <Node name="Models" expanded="True" />
               <Node name="Services" expanded="True" />
-              <Node name="Utils" expanded="True">
-                <Node name="BsonDocumentOutputFormatter.cs" selected="True" />
-              </Node>
+              <Node name="Utils" expanded="True" />
+              <Node name="appsettings.json" selected="True" />
             </Node>
           </Node>
         </State>

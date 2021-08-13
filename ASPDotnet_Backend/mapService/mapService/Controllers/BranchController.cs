@@ -22,7 +22,16 @@ namespace mapService.Controllers
         [HttpGet("{id}", Name = "GetBranch")]
         public IActionResult GetBranch(int id)
         {
-            return Ok(_branchServices.GetBranch(id));
+            var result = _branchServices.GetBranch(id);
+            if (result != null)
+                return Ok(result);
+
+            else return NotFound();
+        }
+
+        [HttpGet("GetIdList")]
+        public IActionResult getBranchIds() {
+            return Ok(_branchServices.getBranchIdList());
         }
 
         [HttpPost]
@@ -30,5 +39,6 @@ namespace mapService.Controllers
             _branchServices.AddBranch(branch);
             return CreatedAtRoute("GetBranch",new {id=branch.branch_id},branch);
         }
+                
     }
 }

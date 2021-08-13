@@ -10,7 +10,6 @@ namespace mapService.DBConfig
     {
         private readonly IMongoCollection<Branch> _branches;
         private readonly IMongoCollection<PolygonDto> _polygonDto;
-        //private readonly IMongoCollection<Polygon> _polygon;
         private readonly IMongoCollection<BsonDocument> _polygonDocument;
 
         public DbClient(IOptions<mapServiceDatabaseSettings> mapServiceDbConfig)
@@ -19,7 +18,6 @@ namespace mapService.DBConfig
             var database = dbclient.GetDatabase(mapServiceDbConfig.Value.DatabaseName);
             _branches = database.GetCollection<Branch>(mapServiceDbConfig.Value.BranchCollectionName);
             _polygonDto = database.GetCollection<PolygonDto>(mapServiceDbConfig.Value.PolygonCollectionName);
-            //_polygon = database.GetCollection<Polygon>(mapServiceDbConfig.Value.PolygonCollectionName);
             _polygonDocument = database.GetCollection<BsonDocument>(mapServiceDbConfig.Value.PolygonCollectionName);
         }
 
@@ -30,10 +28,6 @@ namespace mapService.DBConfig
         {
             return _polygonDto;
         }
-        /*public IMongoCollection<Polygon> GetPolygonCollection()
-        {
-            return _polygon;
-        }*/
         public IMongoCollection<BsonDocument> GetPolygonDocumentCollection()
         {
             return _polygonDocument;

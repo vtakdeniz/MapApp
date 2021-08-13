@@ -11,6 +11,7 @@ namespace mapService.Services
     {
         private readonly IMongoCollection<PolygonDto> _polygons;
         private readonly IMongoCollection<BsonDocument> _polygonDocument;
+
         public PolygonServices(IDbClient dbClient)
         {
             _polygons = dbClient.GetPolygonDtoCollection();
@@ -40,7 +41,6 @@ namespace mapService.Services
         
         public List<BsonDocument> GetPolygons()
         {
-            //return _polygonDocument.Find(new BsonDocument()).First();
             return _polygonDocument.Find(new BsonDocument()).ToList();
         }
 
@@ -52,17 +52,11 @@ namespace mapService.Services
         }*/
 
         public BsonDocument castPolygon(PolygonDto polygonDto) {
-            Polygon p = new Polygon();
             Geo g = new Geo();
-            p.Geo = g;
-            p.branch_id = polygonDto.branch_id;
             if (polygonDto.GeoMultipoly == null) {
-                p.Geo.coordinates = polygonDto.GeoPoly.coordinates[0];
+                g.coordinates = polygonDto.GeoPoly.coordinates[0];
                 g.type = polygonDto.GeoPoly.type;
-                _polygons.InsertOne(polygonDto);
-                p.Id = polygonDto.Id;
-                DeletePolygon(polygonDto.Id);
-                BsonDocument document = new BsonDocument {  BsonDocument.Parse(p.ToJson()) };
+                BsonDocument document = new BsonDocument { { "branch_id", polygonDto.branch_id }, { "Geo", BsonDocument.Parse(g.ToJson()) } };
                  return document;
             }
             else
@@ -71,5 +65,18 @@ namespace mapService.Services
                  return document;
             }
         }
+
+        public List<BsonDocument> getSelectedPolygons(List<int> idList) {
+            List<BsonDocument> postData = new List<BsonDocument>();
+
+            foreach (int id in idList) {
+                var temp = GetPolygon(id);
+                if (temp!=null) {
+                    postData.Add(temp);
+                }
+            }
+            return postData;
+        }
+
     }
 }
