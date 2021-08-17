@@ -1,19 +1,17 @@
-var markerToGeoMap={};
 var markerGEO;
-
 var fgroup = new L.featureGroup();
+var dbPolyGroup = new L.featureGroup();
+var markerGroup = new L.featureGroup();
+
 fgroup.on('click',function(e){
     let popup = L.popup();
     popup
         .setLatLng(e.latlng)
-        .setContent(`<button onclick='showPolyModal()'>Add a polygon</button>`)
+        .setContent(`<button class="btn btn-primary" onclick='showPolyModal()'>Add a polygon</button><br><br><button class="btn btn-primary" onclick='fetchHospitals()'>Fetch hospitals</button>`)
         .openOn(mymap);
         //console.log(e.latlng);
 } );;
-
-var markerGroup = new L.featureGroup();
 //l.pm.utils.getLayer
-
 var mymap = L.map('tr_map').setView([38.963745, 35.243322], 5);
 const attributions = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 const tileUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -48,23 +46,9 @@ else{
 }
 });
 
+function fetchHospitals(){
 
-
-
-
-/*mymap.on('click', onMapClick);*/
-
-/*L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
-    id: 'mapbox/streets-v11',
-    tileSize: 512,
-    zoomOffset: -1,
-    accessToken: 'your.mapbox.access.token'
-}).addTo(mymap);*/
-
-
-var dbPolyGroup = new L.featureGroup();
+}
 
 function getBranchOnMap(){
     dbPolyGroup.eachLayer(function (layer) {
@@ -76,15 +60,9 @@ function getBranchOnMap(){
     clearColorHistory();
     let checkboxValues=[];
     let checkboxList = $(".branchid-checkbox");
-    //console.log(checkboxList);
     for(let i=0; checkboxList[i]; ++i){
-        //console.log(i);
-        console.log(checkboxList[i]);
-        //console.log(checkboxList[i].checked);
         if(checkboxList[i].checked){
             checkboxValues.push(checkboxList[i].value);
-            //apiRoutes.Branches.getBranchesById
-            
         }
   }
   $.ajax({
@@ -98,19 +76,19 @@ function getBranchOnMap(){
             let polygon =datax[i].Geo.coordinates;
             if(datax[i].Geo.type=="Polygon"){
                 let col = randomColor();
-                drawPolygon(polygon,col);
+                drawPolygon(polygon,col,datax[i]);
             }
             else if(datax[i].Geo.type=="MultiPolygon"){
                 let col = randomColor();
                 for (let j = 0; j < polygon.length; j++) {
-                    drawPolygon(polygon[j],col);
+                    drawPolygon(polygon[j],col,datax[i]);
                 }
             }
         }
   });
 }
 
-function drawPolygon(coords,col){
+function drawPolygon(coords,col,datax){
     let temporaryCoords = [];
     for (let k = 0; k < coords[0].length; k++) {
         temporaryCoords.push(coords[0][k].reverse());
@@ -120,6 +98,7 @@ function drawPolygon(coords,col){
         color: col,
         fillOpacity: 0.5,
         }).addTo(mymap);
+    polygon.bindPopup("Branch id :"+datax.branch_id);
     dbPolyGroup.addLayer(polygon);
 }
 

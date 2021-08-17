@@ -11,5 +11,8 @@ namespace mapService.DBConfig
         IMongoCollection<PolygonDto> GetPolygonDtoCollection();
         //IMongoCollection<Polygon> GetPolygonCollection();
         IMongoCollection<BsonDocument> GetPolygonDocumentCollection();
+        IMongoCollection<BsonDocument> GetHospitalDocumentCollection();
+        //IMongoCollection<BsonDocument> GetHospitalCollection();
+        IMongoCollection<BsonDocument> GetHospitalPolygonDocumentCollection();
     }
 }

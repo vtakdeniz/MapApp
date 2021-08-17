@@ -44,8 +44,8 @@ namespace mapService
             services.Configure<mapServiceDatabaseSettings>(
                     Configuration.GetSection(nameof(mapServiceDatabaseSettings)));
             services.AddTransient<IBranchServices, BranchServices>();
-            _ = services.AddTransient<IPolygonServices, PolygonServices>();
-
+            services.AddTransient<IPolygonServices, PolygonServices>();
+            services.AddTransient<IHospitalServices, HospitalServices>();
             //services.AddControllers();
 
         }

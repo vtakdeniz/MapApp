@@ -35,7 +35,6 @@ namespace mapService.Services
         public BsonDocument GetPolygon(int id)
         {
             var filter = Builders<BsonDocument>.Filter.Eq("branch_id", id);
-
             return _polygonDocument.Find(filter).FirstOrDefault();
         }
         

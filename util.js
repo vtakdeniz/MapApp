@@ -3,7 +3,6 @@ var takenColors=[];
 
 function randomColor(){
     let randomNum = Math.floor(Math.random()*10);
-    console.log(randomNum)
     while(takenColors.includes(randomNum) ){
         
         randomNum = Math.floor(Math.random()*10);
