@@ -32,7 +32,7 @@ namespace mapService.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddPolygon(PolygonDto inputObj) {
+        public IActionResult AddPolygon(BranchPolygonDto inputObj) {
             _polygonServices.AddPolygon(inputObj);
             return Ok();
         }

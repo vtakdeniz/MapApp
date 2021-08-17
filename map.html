@@ -91,11 +91,38 @@
                 </div>
                 <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="clearInputFields()" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="sendFormPost('poly_form');">Post</button>
+                <button type="button" class="btn btn-primary" onclick="sendFormPost('poly_form')">Post</button>
                 </div>
             </div>
             </div>
         </div>
+
+
+        <!-- Modal for hospital polygons-->
+        <div class="modal fade" id="hospitalPolygonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-scrollable" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+              <h5 class="modal-title" id="Modal-scrollable">Save this polygon</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+              </div>
+              <div class="modal-body">
+                  <form class="poly_name_form" id="poly_name_form" >
+
+                      <label for="poly_name">Polygon name :</label>
+                      <input  class="modal-input" name="poly_name">
+
+                  </form>
+              </div>
+              <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" onclick="clearInputFields()" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="sendFormPost('poly_name_form')">Post</button>
+              </div>
+          </div>
+          </div>
+      </div>
 
 
 

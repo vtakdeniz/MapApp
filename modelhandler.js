@@ -1,32 +1,3 @@
-var configuration = {
-  "api":{
-      "base":{
-        "development":"https://localhost:5001/"
-      }
-
-  }
-}
-
-var apiRoutes = {
-  "Branches":{
-    "branchBase":configuration.api.base.development+"Branch",
-    "getBranches":configuration.api.base.development+"Branch",
-    "getBranchById":function(id){
-        return configuration.api.base.development+"/"+id;
-    },
-    "getBranchesById":configuration.api.base.development+"Branch/GetSelectedBranches",
-    "getBranchIds":configuration.api.base.development+"Branch/GetIdList",
-    },
-    "Polygons":{
-      "polygonBase":configuration.api.base.development+"Polygon",
-      "getPolygons":configuration.api.base.development+"Polygon",
-      "getPolygonById":function (id){
-          return configuration.api.base.development+id;
-      },
-      "getPolygonsById":configuration.api.base.development+"Polygon/GetSelectedPolygons"
-    }
- 
-}
 
 $.getJSON(apiRoutes.Branches.getBranchIds,{},function(data, textStatus, jqXHR){
     let forms = document.getElementsByClassName("branch-id-selector");
@@ -74,5 +45,14 @@ function showPolyModal(){
 
 function closePolyModal(){
   $('#polygonModal').modal('hide');
+}
+
+
+function showHospitalPolygonModal(){
+  $('#hospitalPolygonModal').modal('show');
+}
+
+function closeHospitalPolygonModal(){
+  $('#hospitalPolygonModal').modal('hide');
 }
 

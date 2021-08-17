@@ -2,12 +2,23 @@ var markerGEO;
 var fgroup = new L.featureGroup();
 var dbPolyGroup = new L.featureGroup();
 var markerGroup = new L.featureGroup();
+var hospitalLayerGroup = new L.featureGroup();
+var hospitalMarkerGroup = new L.featureGroup();
+
+var hospital_icon =  L.icon({
+    iconUrl: 'hospital_icon2.png',
+    //shadowUrl: 'leaf-shadow.png',
+
+    iconSize:     [38, 55], 
+    popupAnchor:  [-3, -76]
+});
+
 
 fgroup.on('click',function(e){
     let popup = L.popup();
     popup
         .setLatLng(e.latlng)
-        .setContent(`<button class="btn btn-primary" onclick='showPolyModal()'>Add a polygon</button><br><br><button class="btn btn-primary" onclick='fetchHospitals()'>Fetch hospitals</button>`)
+        .setContent(`<button class="btn btn-primary" onclick='showPolyModal()'>Add a polygon</button><br><br><button class="btn btn-primary" onclick='showHospitalPolygonModal()'>Fetch hospitals</button>`)
         .openOn(mymap);
         //console.log(e.latlng);
 } );;
@@ -28,7 +39,7 @@ if(e.shape=='Marker'){
     let popup = L.popup();
     popup
         .setLatLng(e.layer.getLatLng())
-        .setContent(`<button onclick='showBranchModal()'>Add a branch</button>`)
+        .setContent(`<button class="btn btn-primary" onclick='showBranchModal()'>Add a branch</button>`)
         .openOn(mymap);
         //markerGEO=e.layer.getLatLng();
         e.layer.on('click', function (d) {
@@ -37,7 +48,7 @@ if(e.shape=='Marker'){
                 markerGEO=crd;
                 popup
                     .setLatLng(d.latlng)
-                    .setContent(`<button onclick='showBranchModal()'>Add a branch</button>`)
+                    .setContent(`<button class="btn btn-primary" onclick='showBranchModal()'>Add a branch</button>`)
                     .openOn(mymap);
             });
 }
@@ -45,10 +56,6 @@ else{
     fgroup.addLayer(e.layer);
 }
 });
-
-function fetchHospitals(){
-
-}
 
 function getBranchOnMap(){
     dbPolyGroup.eachLayer(function (layer) {
@@ -72,7 +79,7 @@ function getBranchOnMap(){
     contentType:'application/json'
     //dataType: dataType
   }).done(function(datax){
-      for(let i=0; datax[i]; ++i){
+      for(let i=0; datax[i]; i++){
             let polygon =datax[i].Geo.coordinates;
             if(datax[i].Geo.type=="Polygon"){
                 let col = randomColor();
@@ -104,23 +111,20 @@ function drawPolygon(coords,col,datax){
 
 
 function fetchPoly(){
-    var inputObj = {};
-    var geo = {};
-    var testPolygon = []; 
-
+    let inputObj = {};
+    let geo = {};
+    let testPolygon = []; 
     fgroup.eachLayer(function (layer) {
+        
         if (layer.toGeoJSON().type == "Feature") {
-            //console.log("Feature");
             layer.remove();
             fgroup.removeLayer(layer);
-            //console.log(layer.toGeoJSON().geometry.coordinates); 
             testPolygon.push(layer.toGeoJSON().geometry.coordinates);
         } 
     });
-    
     if (testPolygon.length == 1) {
         geo.type = "Polygon";
-        geo.coordinates = testPolygon;
+        geo.coordinates = testPolygon[0];
         inputObj.GeoPoly = geo;
     }
     else {
@@ -131,6 +135,36 @@ function fetchPoly(){
 
     return inputObj;
 }
+
+function fetchHospitals(){
+    hospitalLayerGroup.eachLayer(function (layer) {
+        layer.remove();
+        hospitalLayerGroup.removeLayer(layer);
+    });
+    hospitalMarkerGroup.eachLayer(function (layer) {
+        layer.remove();
+        hospitalMarkerGroup.removeLayer(layer);
+    });
+    fgroup.eachLayer(function (layer) {
+        if (layer.toGeoJSON().type == "Feature") {
+            layer.setStyle({
+                color: 'red',
+                fillOpacity: 0.3
+            });
+            hospitalLayerGroup.addLayer(layer);
+        } 
+    });
+
+    let poly = fetchPoly();
+    //postData(poly,apiRoutes.Hospitals.getHospitalsInPolygon);
+
+    hospitalLayerGroup.eachLayer(function (layer) {
+        layer.addTo(mymap);
+    });
+
+    return poly;
+}
+
 
 function clearInputFields(){
   let inputs, index;
@@ -147,35 +181,58 @@ function sendFormPost(form_type){
     let finalObj;
     let datax = new FormData(formData);
     let value = Object.fromEntries(datax.entries());
-
+    var callback;
     if (form_type=='branch_form'){
       let geoObj={"type":"Point","coordinates":value["Geo"].split(",").map(Number)};
       url=url=apiRoutes.Branches.branchBase;
-      formData = document.getElementById("branch_form");
+      //formData = document.getElementById("branch_form");
       value["Geo"]=geoObj;
       finalObj=value;
-      console.log(finalObj);
       closeBranchModal();
    }
-   else{
+   else if (form_type=="poly_form"){
       url=apiRoutes.Polygons.polygonBase;
-      formData = document.getElementById("poly_form");
+      //formData = document.getElementById("poly_form");
       let poly_cord = fetchPoly();
       finalObj = $.extend(value,poly_cord);
       closePolyModal();
    }
+   else{
+       url=apiRoutes.Hospitals.getHospitalsInPolygon;
+       let hospital_poly=fetchHospitals();
+       finalObj=$.extend(value,hospital_poly);
+       closeHospitalPolygonModal();
+       callback=function(datax){
+            for(let i=0; datax[i]; ++i){
+               let marker =  L.marker([datax[i].Geo.coordinates[1],datax[i].Geo.coordinates[0]], {icon: hospital_icon}).addTo(mymap);
+               marker.on('click', function (d) {
+                let popup = L.popup();
+                popup
+                    .setLatLng(d.latlng)
+                    .setContent(`<b>Hastane Adı : </b>`+datax[i].Ad+"<br><b>Kategori : </b>"+datax[i].Kategori
+                    +"<br><b>Üst Kategori : </b>"+datax[i].UstKategori+"<br><b>İl : </b>"+datax[i].Il+"<br><b>İlçe : </b>"+datax[i].Ilce
+                    +"<br><b>Mahalle : </b>"+datax[i].Mahalle+"<br><b>Posta Kodu : </b>"+datax[i].PostaKodu+"<br><b>Bulvar cadde :</b> "
+                    +datax[i].BulvarCadde+"<br><b>Sokak : </b>"+datax[i].Sokak)
+                    .openOn(mymap);
+            });
+               hospitalMarkerGroup.addLayer(marker);
+            }
+       }
+   }
     
     //ajax call should match the form id
-    console.log(JSON.stringify(finalObj));
-    postData(finalObj,url);
+    postData(finalObj,url,callback);
     clearInputFields();
     
   }
 
 
-function postData(jdata,urlx){
+function postData(jdata,urlx,callback){
+    if(!callback){
+        callback=function (){
+        }
+    }
     jsondata=JSON.stringify(jdata);
-    console.log(jdata);
     $.ajax({
         
             method: "POST",
@@ -183,7 +240,7 @@ function postData(jdata,urlx){
             data: jsondata ,
             contentType:'application/json'
           
-      });
+      }).done(callback);
 }
 
 

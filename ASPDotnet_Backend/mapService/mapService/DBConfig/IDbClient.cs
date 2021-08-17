@@ -8,7 +8,7 @@ namespace mapService.DBConfig
     public interface IDbClient
     {
         IMongoCollection<Branch> GetBranchCollection();
-        IMongoCollection<PolygonDto> GetPolygonDtoCollection();
+        IMongoCollection<BranchPolygonDto> GetPolygonDtoCollection();
         //IMongoCollection<Polygon> GetPolygonCollection();
         IMongoCollection<BsonDocument> GetPolygonDocumentCollection();
         IMongoCollection<BsonDocument> GetHospitalDocumentCollection();

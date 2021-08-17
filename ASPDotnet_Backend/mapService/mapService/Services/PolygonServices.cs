@@ -9,7 +9,7 @@ namespace mapService.Services
 {
     public class PolygonServices : IPolygonServices
     {
-        private readonly IMongoCollection<PolygonDto> _polygons;
+        private readonly IMongoCollection<BranchPolygonDto> _polygons;
         private readonly IMongoCollection<BsonDocument> _polygonDocument;
 
         public PolygonServices(IDbClient dbClient)
@@ -18,7 +18,7 @@ namespace mapService.Services
             _polygonDocument = dbClient.GetPolygonDocumentCollection();
         }
 
-        public PolygonDto AddPolygon(PolygonDto inputObj)
+        public BranchPolygonDto AddPolygon(BranchPolygonDto inputObj)
         {
 
             //TODO: gelen input obj bir son dökümana çevirip kaydet - Dökümanı el ile inşa et
@@ -50,12 +50,12 @@ namespace mapService.Services
             return inputObj;
         }*/
 
-        public BsonDocument castPolygon(PolygonDto polygonDto) {
-            Geo g = new Geo();
+        public BsonDocument castPolygon(BranchPolygonDto polygonDto) {
+            //GeoPoly g = new GeoPoly();
             if (polygonDto.GeoMultipoly == null) {
-                g.coordinates = polygonDto.GeoPoly.coordinates[0];
-                g.type = polygonDto.GeoPoly.type;
-                BsonDocument document = new BsonDocument { { "branch_id", polygonDto.branch_id }, { "Geo", BsonDocument.Parse(g.ToJson()) } };
+                //g.coordinates = polygonDto.GeoPoly.coordinates[0];
+                //g.type = polygonDto.GeoPoly.type;
+                BsonDocument document = new BsonDocument { { "branch_id", polygonDto.branch_id }, { "Geo", BsonDocument.Parse(polygonDto.GeoPoly.ToJson()) } };
                  return document;
             }
             else

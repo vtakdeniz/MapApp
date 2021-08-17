@@ -9,7 +9,7 @@ namespace mapService.DBConfig
     public class DbClient :IDbClient
     {
         private readonly IMongoCollection<Branch> _branches;
-        private readonly IMongoCollection<PolygonDto> _polygonDto;
+        private readonly IMongoCollection<BranchPolygonDto> _polygonDto;
         private readonly IMongoCollection<BsonDocument> _polygonDocument;
         private readonly IMongoCollection<BsonDocument> _hospitalDocument;
         private readonly IMongoCollection<BsonDocument> _hospitalPolygonDocument;
@@ -19,7 +19,7 @@ namespace mapService.DBConfig
             var dbclient = new MongoClient(mapServiceDbConfig.Value.ConnectionString);
             var database = dbclient.GetDatabase(mapServiceDbConfig.Value.DatabaseName);
             _branches = database.GetCollection<Branch>(mapServiceDbConfig.Value.BranchCollectionName);
-            _polygonDto = database.GetCollection<PolygonDto>(mapServiceDbConfig.Value.PolygonCollectionName);
+            _polygonDto = database.GetCollection<BranchPolygonDto>(mapServiceDbConfig.Value.PolygonCollectionName);
             _polygonDocument = database.GetCollection<BsonDocument>(mapServiceDbConfig.Value.PolygonCollectionName);
             _hospitalDocument = database.GetCollection<BsonDocument>(mapServiceDbConfig.Value.HospitalCollectionName);
             _hospitalPolygonDocument = database.GetCollection<BsonDocument>(mapServiceDbConfig.Value.HospitalPolygonCollectionName);
@@ -28,7 +28,7 @@ namespace mapService.DBConfig
         public IMongoCollection<Branch> GetBranchCollection() {
             return _branches;
         }
-        public IMongoCollection<PolygonDto> GetPolygonDtoCollection()
+        public IMongoCollection<BranchPolygonDto> GetPolygonDtoCollection()
         {
             return _polygonDto;
         }

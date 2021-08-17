@@ -9,7 +9,7 @@ namespace mapService.Services
     public interface IPolygonServices
     {
         List<BsonDocument> GetPolygons();
-        PolygonDto AddPolygon(PolygonDto inputObj);
+        BranchPolygonDto AddPolygon(BranchPolygonDto inputObj);
         BsonDocument GetPolygon(int id);
         void DeletePolygon(string id);
         List<BsonDocument> getSelectedPolygons(List<int> idList);

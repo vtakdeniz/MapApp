@@ -19,5 +19,10 @@ namespace mapService.Controllers
         {
             _hospitalServices = hospitalServices;
         }
+
+        [HttpPost]
+        public IActionResult getHospitalsInPolygon(HospitalPolygonDto hospitalPolygonDto) {
+            return Ok(_hospitalServices.getHospitalsInPolygon(hospitalPolygonDto));
+        }
     }
 }
