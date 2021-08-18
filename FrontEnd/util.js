@@ -27,7 +27,9 @@ var configuration = {
       },
       "Hospitals":{
           "hospitalBase":configuration.api.base.development+"Hospital",
-          "getHospitalsInPolygon":configuration.api.base.development+"Hospital"
+          "getHospitalsInPolygon":configuration.api.base.development+"Hospital",
+          "getHospitalPolygonsNames":configuration.api.base.development+"Hospital/"+"GetPolygonList",
+          "getHospitalPolygons":configuration.api.base.development+"Hospital/"+"getPolygons"
       }
    
   }

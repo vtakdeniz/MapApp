@@ -6,10 +6,10 @@ var hospitalLayerGroup = new L.featureGroup();
 var hospitalMarkerGroup = new L.featureGroup();
 
 var hospital_icon =  L.icon({
-    iconUrl: 'hospital_icon2.png',
+    iconUrl: 'icon/hospital_icon2.png',
     //shadowUrl: 'leaf-shadow.png',
 
-    iconSize:     [38, 55], 
+    iconSize:     [19, 25], 
     popupAnchor:  [-3, -76]
 });
 
@@ -71,7 +71,7 @@ function getBranchOnMap(){
         if(checkboxList[i].checked){
             checkboxValues.push(checkboxList[i].value);
         }
-  }
+    }
   $.ajax({
     type: "POST",
     url: apiRoutes.Polygons.getPolygonsById,
@@ -107,6 +107,7 @@ function drawPolygon(coords,col,datax){
         }).addTo(mymap);
     polygon.bindPopup("Branch id :"+datax.branch_id);
     dbPolyGroup.addLayer(polygon);
+    fgroup.addLayer(polygon);
 }
 
 
@@ -149,7 +150,7 @@ function fetchHospitals(){
         if (layer.toGeoJSON().type == "Feature") {
             layer.setStyle({
                 color: 'red',
-                fillOpacity: 0.3
+                fillOpacity: 0.2
             });
             hospitalLayerGroup.addLayer(layer);
         } 
@@ -216,6 +217,16 @@ function sendFormPost(form_type){
                     .openOn(mymap);
             });
                hospitalMarkerGroup.addLayer(marker);
+
+               hospitalLayerGroup.eachLayer(function (layer) {
+                layer.on('click', function (d) {
+                        let popup = L.popup();
+                        popup
+                            .setLatLng(d.latlng)
+                            .setContent("<b>"+"Polgon Name : "+"</b>"+value["poly_name"])
+                            .openOn(mymap);
+                    });
+                });
             }
        }
    }
@@ -233,6 +244,7 @@ function postData(jdata,urlx,callback){
         }
     }
     jsondata=JSON.stringify(jdata);
+    console.log(jsondata);
     $.ajax({
         
             method: "POST",
@@ -244,3 +256,35 @@ function postData(jdata,urlx,callback){
 }
 
 
+
+function getHospitalsWithPolygons(){
+    let checkboxValues=[];
+    let checkboxList = $(".hospital-polygon-checkbox");
+    for(let i=0; checkboxList[i]; ++i){
+        if(checkboxList[i].checked){
+            checkboxValues.push(checkboxList[i].value);
+        }
+    }
+    console.log(apiRoutes.Hospitals.getHospitalPolygons);
+    $.ajax({
+        type: "POST",
+        url: apiRoutes.Hospitals.getHospitalPolygons,
+        data: JSON.stringify(checkboxValues),
+        contentType:'application/json'
+      }).done(function(datax){
+          for(let i=0; datax[i]; i++){
+                let polygon =datax[i].Geo.coordinates;
+                if(datax[i].Geo.type=="Polygon"){
+                    let col = randomColor();
+                    drawPolygon(polygon,col,datax[i]);
+                }
+                else if(datax[i].Geo.type=="MultiPolygon"){
+                    let col = randomColor();
+                    for (let j = 0; j < polygon.length; j++) {
+                        drawPolygon(polygon[j],col,datax[i]);
+                    }
+                }
+            }
+      });
+
+}

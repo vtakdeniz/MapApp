@@ -13,9 +13,13 @@ namespace mapService.Models
         
         public string polygon_name { get; set; }
 
+        [BsonIgnoreIfNull]
         public GeoMultipoly GeoMultipoly { get; set; }
 
+        [BsonIgnoreIfNull]
         public GeoPoly GeoPoly { get; set; }
 
+        [BsonExtraElements]
+        public BsonDocument extra { get; set; }
     }
 }

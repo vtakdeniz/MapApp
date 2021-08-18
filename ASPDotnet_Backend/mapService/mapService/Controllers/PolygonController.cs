@@ -43,7 +43,10 @@ namespace mapService.Controllers
         {
             var polys = _polygonServices.getSelectedPolygons(idList);
 
-            return Ok(polys);
+            if (polys!=null) {
+                return Ok(polys);
+            }
+            return NotFound();
         }
     }
 }

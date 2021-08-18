@@ -13,6 +13,7 @@ namespace mapService.DBConfig
         private readonly IMongoCollection<BsonDocument> _polygonDocument;
         private readonly IMongoCollection<BsonDocument> _hospitalDocument;
         private readonly IMongoCollection<BsonDocument> _hospitalPolygonDocument;
+        private readonly IMongoCollection<HospitalPolygonDto> _hospitalPolygon;
 
         public DbClient(IOptions<mapServiceDatabaseSettings> mapServiceDbConfig)
         {
@@ -23,6 +24,7 @@ namespace mapService.DBConfig
             _polygonDocument = database.GetCollection<BsonDocument>(mapServiceDbConfig.Value.PolygonCollectionName);
             _hospitalDocument = database.GetCollection<BsonDocument>(mapServiceDbConfig.Value.HospitalCollectionName);
             _hospitalPolygonDocument = database.GetCollection<BsonDocument>(mapServiceDbConfig.Value.HospitalPolygonCollectionName);
+            _hospitalPolygon = database.GetCollection<HospitalPolygonDto>(mapServiceDbConfig.Value.HospitalPolygonCollectionName);
         }
 
         public IMongoCollection<Branch> GetBranchCollection() {
@@ -45,6 +47,11 @@ namespace mapService.DBConfig
         public IMongoCollection<BsonDocument> GetHospitalPolygonDocumentCollection()
         {
             return _hospitalPolygonDocument;
+        }
+
+        public IMongoCollection<HospitalPolygonDto> GetHospitalPolygonCollection()
+        {
+            return _hospitalPolygon;
         }
     }
 }

@@ -22,7 +22,23 @@ namespace mapService.Controllers
 
         [HttpPost]
         public IActionResult getHospitalsInPolygon(HospitalPolygonDto hospitalPolygonDto) {
+
+            if (hospitalPolygonDto == null)
+            {
+                return BadRequest();
+            }
+
             return Ok(_hospitalServices.getHospitalsInPolygon(hospitalPolygonDto));
+        }
+
+        [HttpGet("GetPolygonList")]
+        public IActionResult getHospitalPolygonNameList() {
+            return Ok(_hospitalServices.getHospitalPolygonNameList());
+        }
+
+        [HttpPost("GetPolygons")]
+        public IActionResult getSelectedHospitalPolygons(List<string> names) {
+            return Ok(_hospitalServices.getSelectedHospitalPolygons(names));
         }
     }
 }

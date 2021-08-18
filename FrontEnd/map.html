@@ -77,7 +77,7 @@
                 </button>
                 </div>
                 <div class="modal-body">
-                    <form class="branch_id_form" id="poly_form" >
+                    <form id="hospital-polygon_form" >
                         <!-- Modal for polygons
                         <label for="poly_id">Poly Id:</label>
                         <input type="text" id="poly_id" name="poly_id"><br><br>-->
@@ -109,16 +109,16 @@
               </button>
               </div>
               <div class="modal-body">
-                  <form class="poly_name_form" id="poly_name_form" >
+                  <form  id="polygon_name_form" >
 
-                      <label for="poly_name">Polygon name :</label>
-                      <input  class="modal-input" name="poly_name">
+                      <label for="polygon_name">Polygon name :</label>
+                      <input  class="modal-input" name="polygon_name">
 
                   </form>
               </div>
               <div class="modal-footer">
               <button type="button" class="btn btn-secondary" onclick="clearInputFields()" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" onclick="sendFormPost('poly_name_form')">Post</button>
+              <button type="button" class="btn btn-primary" onclick="sendFormPost('polygon_name_form')">Post</button>
               </div>
           </div>
           </div>
@@ -130,49 +130,44 @@
         <div id="page-top">
             <!--navbar-->
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">Search for layers</a>
+
+                <a class="navbar-brand" href="#">Search for branch layers</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
+                    <span class="navbar-toggler-icon"></span>
                 </button>
               
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                   <div class="navbar-element">
                     <ul class="navbar-nav mr-auto">
                         <li>
-                            <!--form class="branch_id_form" id="select-branchid-navbar-form">
-                                <label for="branch_id">Select one or multiple branch id</label>
-                                <select multiple class="form-control branch-id-selector" name="branch_id" id="select-branchid-navbar"> </select>
-                            </form--> 
-                            <div class="checkbox-container">
-                                <!--input class="checkbox-id" name="test" type="checkbox" /> This is checkbox <br />
-                                <label class="form-check-label" for="test">1</label>
-                                <input type="checkbox" /> This is checkbox <br />
-                                <input class="form-check-input" name="pomp" type="checkbox" id="inlineCheckbox1" value="option1"-->
+                            <div class="checkbox-container" id="branch-checkbox-container">
                                 
                             </div>
                           <br>
                           <button margin="10px" class="btn btn-outline-success my-2 my-sm-0" onclick="getBranchOnMap()" type="submit">Search</button>
                         </li>
-                      <!--li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                      </li>
-                      <li class="nav-item dropdown"-->
-                        <!--a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          Dropdown
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item" href="#">Action</a>
-                          <a class="dropdown-item" href="#">Another action</a>
-                          <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                      </li-->
-                      <!--li class="nav-item">
-                        <a class="nav-link disabled" href="#">Disabled</a>
-                      </li-->
+                    </ul>
+                  </div>
+                </div>
+
+
+
+                <a class="navbar-brand" href="#">Search for hospital layers</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+              
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <div class="navbar-element">
+                    <ul class="navbar-nav mr-auto">
+                        <li>
+  
+                            <div class="checkbox-container" id="hospital-checkbox-container">
+
+                            </div>
+                          <br>
+                          <button margin="10px" class="btn btn-outline-success my-2 my-sm-0" onclick="getHospitalsWithPolygons()" type="submit">Search</button>
+                        </li>
                     </ul>
                   </div>
                 </div>

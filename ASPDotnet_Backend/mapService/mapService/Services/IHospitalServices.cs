@@ -7,5 +7,7 @@ namespace mapService.Services
     public interface IHospitalServices
     {
         List<BsonDocument> getHospitalsInPolygon(HospitalPolygonDto hospitalPolygonDto);
+        List<string> getHospitalPolygonNameList();
+        List<BsonDocument> getSelectedHospitalPolygons(List<string> names);
     }
 }
