@@ -10,7 +10,8 @@ namespace mapService.Models
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public string Id { get; set; }
-        
+
+        [BsonIgnoreIfNull]
         public string polygon_name { get; set; }
 
         [BsonIgnoreIfNull]
@@ -20,6 +21,7 @@ namespace mapService.Models
         public GeoPoly GeoPoly { get; set; }
 
         [BsonExtraElements]
+        [BsonIgnoreIfNull]
         public BsonDocument extra { get; set; }
     }
 }

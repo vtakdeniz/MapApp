@@ -1,20 +1,19 @@
 var markerGEO;
-var fgroup = new L.featureGroup();
-var dbPolyGroup = new L.featureGroup();
-var markerGroup = new L.featureGroup();
+var defaultGroup = new L.featureGroup();
+var branchPolygonGroup = new L.featureGroup();
+var branchMarkerGroup = new L.featureGroup();
 var hospitalLayerGroup = new L.featureGroup();
 var hospitalMarkerGroup = new L.featureGroup();
 
 var hospital_icon =  L.icon({
     iconUrl: 'icon/hospital_icon2.png',
-    //shadowUrl: 'leaf-shadow.png',
-
     iconSize:     [19, 25], 
     popupAnchor:  [-3, -76]
 });
 
 
-fgroup.on('click',function(e){
+/////////// Sets the inital map and event listeners
+defaultGroup.on('click',function(e){
     let popup = L.popup();
     popup
         .setLatLng(e.latlng)
@@ -51,17 +50,20 @@ if(e.shape=='Marker'){
                     .setContent(`<button class="btn btn-primary" onclick='showBranchModal()'>Add a branch</button>`)
                     .openOn(mymap);
             });
+    branchMarkerGroup.addLayer(e.layer);        
 }
 else{
-    fgroup.addLayer(e.layer);
+    defaultGroup.addLayer(e.layer);
 }
 });
+/////////////
+
 
 function getBranchOnMap(){
-    dbPolyGroup.eachLayer(function (layer) {
+    branchPolygonGroup.eachLayer(function (layer) {
         if (layer.toGeoJSON().type == "Feature") {
             layer.remove();
-            dbPolyGroup.removeLayer(layer);
+            branchPolygonGroup.removeLayer(layer);
         } 
     });
     clearColorHistory();
@@ -83,19 +85,23 @@ function getBranchOnMap(){
             let polygon =datax[i].Geo.coordinates;
             if(datax[i].Geo.type=="Polygon"){
                 let col = randomColor();
-                drawPolygon(polygon,col,datax[i]);
+                let reversed_polygon = drawPolygon(polygon,col);
+                reversed_polygon.bindPopup("Branch id :"+datax[i].branch_id);
+                branchPolygonGroup.addLayer(reversed_polygon);
             }
             else if(datax[i].Geo.type=="MultiPolygon"){
                 let col = randomColor();
                 for (let j = 0; j < polygon.length; j++) {
-                    drawPolygon(polygon[j],col,datax[i]);
+                    let reversed_polygon = drawPolygon(polygon[j],col);
+                    reversed_polygon.bindPopup("Branch id :"+datax[i].branch_id);
+                    branchPolygonGroup.addLayer(reversed_polygon);
                 }
             }
         }
   });
 }
 
-function drawPolygon(coords,col,datax){
+function drawPolygon(coords,col,opacity=0.5){
     let temporaryCoords = [];
     for (let k = 0; k < coords[0].length; k++) {
         temporaryCoords.push(coords[0][k].reverse());
@@ -103,41 +109,26 @@ function drawPolygon(coords,col,datax){
     let polygon = L.polygon([coords],
         {
         color: col,
-        fillOpacity: 0.5,
+        fillOpacity: opacity,
         }).addTo(mymap);
-    polygon.bindPopup("Branch id :"+datax.branch_id);
-    dbPolyGroup.addLayer(polygon);
-    fgroup.addLayer(polygon);
+    console.log("polygon draw");
+    //console.log(JSON.stringify(polygon));    
+    return polygon;
 }
 
 
-function fetchPoly(){
-    let inputObj = {};
-    let geo = {};
-    let testPolygon = []; 
-    fgroup.eachLayer(function (layer) {
-        
-        if (layer.toGeoJSON().type == "Feature") {
-            layer.remove();
-            fgroup.removeLayer(layer);
-            testPolygon.push(layer.toGeoJSON().geometry.coordinates);
-        } 
-    });
-    if (testPolygon.length == 1) {
-        geo.type = "Polygon";
-        geo.coordinates = testPolygon[0];
-        inputObj.GeoPoly = geo;
+function clearInputFields(){
+    let inputs, index;
+  
+    inputs = document.getElementsByClassName('modal-input');
+    for (index = 0; index < inputs.length; ++index) {
+        inputs[index].value='';
     }
-    else {
-        geo.type = "MultiPolygon";
-        geo.coordinates = testPolygon;
-        inputObj.GeoMultipoly = geo;
-    }
+  }
 
-    return inputObj;
-}
 
-function fetchHospitals(){
+
+function clearHospitalLayers(){
     hospitalLayerGroup.eachLayer(function (layer) {
         layer.remove();
         hospitalLayerGroup.removeLayer(layer);
@@ -146,7 +137,74 @@ function fetchHospitals(){
         layer.remove();
         hospitalMarkerGroup.removeLayer(layer);
     });
-    fgroup.eachLayer(function (layer) {
+}
+
+function clearDefaultPolygons(){
+    defaultGroup.eachLayer(function (layer) {
+        if (layer.toGeoJSON().type == "Feature") {
+            layer.remove();
+            defaultGroup.removeLayer(layer);
+        } 
+    });
+}
+
+function fetchPoly(featureGroup=defaultGroup){
+    let inputObj = {};
+    let geo = {};
+    let testPolygon = []; 
+
+    if(featureGroup==defaultGroup){
+        featureGroup.eachLayer(function (layer) {
+
+            if (layer.toGeoJSON().type == "Feature") {
+                console.log("feature group if");
+                console.log(JSON.stringify(layer.toGeoJSON().geometry.coordinates));
+                testPolygon.push(layer.toGeoJSON().geometry.coordinates);
+            } 
+        });
+        if (testPolygon.length == 1) {
+            geo.type = "Polygon";
+            geo.coordinates = testPolygon[0];
+            console.log("geo coordinate polygon : "+testPolygon[0]);
+            inputObj.GeoPoly = geo;
+        }
+        else {
+            geo.type = "MultiPolygon";
+            geo.coordinates = testPolygon;
+            inputObj.GeoMultipoly = geo;
+        }
+        console.log("fetchpoly");
+        console.log(JSON.stringify(inputObj));
+    }
+
+    else{
+        featureGroup.eachLayer(function (layer) {
+
+            if (layer.toGeoJSON().type == "Feature") {
+                console.log("feature group if");
+                console.log(JSON.stringify(layer.toGeoJSON().geometry.coordinates[0]));
+                testPolygon.push(layer.toGeoJSON().geometry.coordinates[0]);
+            } 
+        });
+        if (testPolygon.length == 1) {
+            geo.type = "Polygon";
+            geo.coordinates = testPolygon[0];
+            console.log("geo coordinate polygon : "+testPolygon[0]);
+            inputObj.GeoPoly = geo;
+        }
+        else {
+            geo.type = "MultiPolygon";
+            geo.coordinates = testPolygon;
+            inputObj.GeoMultipoly = geo;
+        }
+        console.log("fetchpoly");
+        console.log(JSON.stringify(inputObj));
+    }
+    return inputObj;
+}
+
+function fetchHospitals(url,featureGroup=defaultGroup){
+    featureGroup.eachLayer(function (layer) {
         if (layer.toGeoJSON().type == "Feature") {
             layer.setStyle({
                 color: 'red',
@@ -156,25 +214,43 @@ function fetchHospitals(){
         } 
     });
 
-    let poly = fetchPoly();
-    //postData(poly,apiRoutes.Hospitals.getHospitalsInPolygon);
-
+    let poly = fetchPoly(featureGroup);
+    poly.polygon_name="lookup";
+    console.log("fetch hos poly : "+JSON.stringify(poly));
     hospitalLayerGroup.eachLayer(function (layer) {
         layer.addTo(mymap);
     });
 
-    return poly;
+    let callback = function (datax) {
+        for(let i=0; datax[i]; ++i){
+        let marker =  L.marker([datax[i].Geo.coordinates[1],datax[i].Geo.coordinates[0]], {icon: hospital_icon}).addTo(mymap);
+        marker.on('click', function (d) {
+            let popup = L.popup();
+            popup
+                .setLatLng(d.latlng)
+                .setContent(`<b>Hastane Adı : </b>`+datax[i].Ad+"<br><b>Kategori : </b>"+datax[i].Kategori
+                +"<br><b>Üst Kategori : </b>"+datax[i].UstKategori+"<br><b>İl : </b>"+datax[i].Il+"<br><b>İlçe : </b>"+datax[i].Ilce
+                +"<br><b>Mahalle : </b>"+datax[i].Mahalle+"<br><b>Posta Kodu : </b>"+datax[i].PostaKodu+"<br><b>Bulvar cadde :</b> "
+                +datax[i].BulvarCadde+"<br><b>Sokak : </b>"+datax[i].Sokak)
+                .openOn(mymap);
+        });
+        hospitalMarkerGroup.addLayer(marker);
+
+        /*hospitalLayerGroup.eachLayer(function (layer) {
+        layer.on('click', function (d) {
+                let popup = L.popup();
+                popup
+                    .setLatLng(d.latlng)
+                    .setContent("<b>"+"Polygon Name : "+"</b>"+data["polygon_name"])
+                    .openOn(mymap);
+            });
+        });*/
+    }
+}
+    postData(poly,url,callback);
+
 }
 
-
-function clearInputFields(){
-  let inputs, index;
-
-  inputs = document.getElementsByClassName('modal-input');
-  for (index = 0; index < inputs.length; ++index) {
-      inputs[index].value='';
-  }
-}
 
 function sendFormPost(form_type){
     let url;
@@ -189,53 +265,27 @@ function sendFormPost(form_type){
       //formData = document.getElementById("branch_form");
       value["Geo"]=geoObj;
       finalObj=value;
+      postData(finalObj,url,callback);
       closeBranchModal();
    }
-   else if (form_type=="poly_form"){
+   else if (form_type=="polygon_form"){
       url=apiRoutes.Polygons.polygonBase;
       //formData = document.getElementById("poly_form");
       let poly_cord = fetchPoly();
       finalObj = $.extend(value,poly_cord);
+      postData(finalObj,url,callback);
       closePolyModal();
    }
    else{
+       clearHospitalLayers();
+       
        url=apiRoutes.Hospitals.getHospitalsInPolygon;
-       let hospital_poly=fetchHospitals();
-       finalObj=$.extend(value,hospital_poly);
+       
        closeHospitalPolygonModal();
-       callback=function(datax){
-            for(let i=0; datax[i]; ++i){
-               let marker =  L.marker([datax[i].Geo.coordinates[1],datax[i].Geo.coordinates[0]], {icon: hospital_icon}).addTo(mymap);
-               marker.on('click', function (d) {
-                let popup = L.popup();
-                popup
-                    .setLatLng(d.latlng)
-                    .setContent(`<b>Hastane Adı : </b>`+datax[i].Ad+"<br><b>Kategori : </b>"+datax[i].Kategori
-                    +"<br><b>Üst Kategori : </b>"+datax[i].UstKategori+"<br><b>İl : </b>"+datax[i].Il+"<br><b>İlçe : </b>"+datax[i].Ilce
-                    +"<br><b>Mahalle : </b>"+datax[i].Mahalle+"<br><b>Posta Kodu : </b>"+datax[i].PostaKodu+"<br><b>Bulvar cadde :</b> "
-                    +datax[i].BulvarCadde+"<br><b>Sokak : </b>"+datax[i].Sokak)
-                    .openOn(mymap);
-            });
-               hospitalMarkerGroup.addLayer(marker);
-
-               hospitalLayerGroup.eachLayer(function (layer) {
-                layer.on('click', function (d) {
-                        let popup = L.popup();
-                        popup
-                            .setLatLng(d.latlng)
-                            .setContent("<b>"+"Polgon Name : "+"</b>"+value["poly_name"])
-                            .openOn(mymap);
-                    });
-                });
-            }
-       }
+       fetchHospitals(url,value);
    }
-    
-    //ajax call should match the form id
-    postData(finalObj,url,callback);
     clearInputFields();
-    
-  }
+}
 
 
 function postData(jdata,urlx,callback){
@@ -258,6 +308,7 @@ function postData(jdata,urlx,callback){
 
 
 function getHospitalsWithPolygons(){
+    clearHospitalLayers();
     let checkboxValues=[];
     let checkboxList = $(".hospital-polygon-checkbox");
     for(let i=0; checkboxList[i]; ++i){
@@ -272,19 +323,32 @@ function getHospitalsWithPolygons(){
         data: JSON.stringify(checkboxValues),
         contentType:'application/json'
       }).done(function(datax){
+          console.log("test");
+          let url =apiRoutes.Hospitals.getHospitalsInPolygon;
           for(let i=0; datax[i]; i++){
+                console.log(datax[i]);
                 let polygon =datax[i].Geo.coordinates;
                 if(datax[i].Geo.type=="Polygon"){
-                    let col = randomColor();
-                    drawPolygon(polygon,col,datax[i]);
+                    let col = "red";
+                    let reversed_polygon = drawPolygon(polygon,col,0.2);
+                    console.log(JSON.stringify("getHospitalsWithPolygons : "+JSON.stringify(reversed_polygon.GeoPoly)));
+                    reversed_polygon.bindPopup("<b>Polygon name : </b>"+datax[i].polygon_name);
+                    hospitalLayerGroup.addLayer(reversed_polygon);
                 }
                 else if(datax[i].Geo.type=="MultiPolygon"){
-                    let col = randomColor();
+                    let col = "red";
+                    let reversed_polygon;
                     for (let j = 0; j < polygon.length; j++) {
-                        drawPolygon(polygon[j],col,datax[i]);
+                        reversed_polygon = drawPolygon(polygon[j],col,0.2);
+                        reversed_polygon.bindPopup("<b>Polygon name : </b>"+datax[i].polygon_name);
+                        console.log(JSON.stringify("getHospitalsWithPolygons : "+JSON.stringify(reversed_polygon.GeoMultipoly)));
+                        hospitalLayerGroup.addLayer(reversed_polygon);
                     }
                 }
             }
+            
+            fetchHospitals(url,hospitalLayerGroup);
+
       });
 
 }
