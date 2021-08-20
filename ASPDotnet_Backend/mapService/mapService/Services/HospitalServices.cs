@@ -41,6 +41,24 @@ namespace mapService.Services
             //var filter = Builders<BsonDocument>.Filter.GeoWithin("Geo",geo);
         }
 
+        public List<BsonDocument> getHospitalsInPolygonNoSave(HospitalPolygonDto hospitalPolygonDto)
+        {
+            var qs = "";
+
+            if (hospitalPolygonDto.GeoMultipoly != null)
+            {
+                qs = "{ Geo: { $geoIntersects: { $geometry: " + hospitalPolygonDto.GeoMultipoly.ToJson() + " } } }";
+            }
+            else
+            {
+                qs = "{ Geo: { $geoIntersects: { $geometry : " + hospitalPolygonDto.GeoPoly.ToJson() + " } } }";
+            }
+
+            var res = _hospitals.Find(qs).ToList();
+            return res;
+        }
+
+
         public BsonDocument castPolygon(HospitalPolygonDto hospitalPolygonDto) {
             if (hospitalPolygonDto.GeoMultipoly == null)
             {

@@ -9,5 +9,6 @@ namespace mapService.Services
         List<BsonDocument> getHospitalsInPolygon(HospitalPolygonDto hospitalPolygonDto);
         List<string> getHospitalPolygonNameList();
         List<BsonDocument> getSelectedHospitalPolygons(List<string> names);
+        List<BsonDocument> getHospitalsInPolygonNoSave(HospitalPolygonDto hospitalPolygonDto);
     }
 }

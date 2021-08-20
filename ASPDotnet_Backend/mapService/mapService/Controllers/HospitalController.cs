@@ -40,5 +40,17 @@ namespace mapService.Controllers
         public IActionResult getSelectedHospitalPolygons(List<string> names) {
             return Ok(_hospitalServices.getSelectedHospitalPolygons(names));
         }
+
+        [HttpPost("GetHospitalsNoSave")]
+        public IActionResult getSelectedHospitalPolygonsNoSave(HospitalPolygonDto hospitalPolygonDto)
+        {
+
+            if (hospitalPolygonDto == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(_hospitalServices.getHospitalsInPolygon(hospitalPolygonDto));
+        }
     }
 }

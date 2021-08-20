@@ -347,7 +347,7 @@ function getHospitalsWithPolygons(){
                 }
             }
             
-            fetchHospitals(url,hospitalLayerGroup);
+            fetchHospitals(apiRoutes.Hospitals.getHospitalsNoSave,hospitalLayerGroup);
 
       });
 
