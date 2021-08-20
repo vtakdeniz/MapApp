@@ -110,9 +110,7 @@ function drawPolygon(coords,col,opacity=0.5){
         {
         color: col,
         fillOpacity: opacity,
-        }).addTo(mymap);
-    console.log("polygon draw");
-    //console.log(JSON.stringify(polygon));    
+        }).addTo(mymap); 
     return polygon;
 }
 
@@ -137,6 +135,7 @@ function clearHospitalLayers(){
         layer.remove();
         hospitalMarkerGroup.removeLayer(layer);
     });
+ 
 }
 
 function clearDefaultPolygons(){
@@ -157,15 +156,12 @@ function fetchPoly(featureGroup=defaultGroup){
         featureGroup.eachLayer(function (layer) {
 
             if (layer.toGeoJSON().type == "Feature") {
-                console.log("feature group if");
-                console.log(JSON.stringify(layer.toGeoJSON().geometry.coordinates));
                 testPolygon.push(layer.toGeoJSON().geometry.coordinates);
             } 
         });
         if (testPolygon.length == 1) {
             geo.type = "Polygon";
             geo.coordinates = testPolygon[0];
-            console.log("geo coordinate polygon : "+testPolygon[0]);
             inputObj.GeoPoly = geo;
         }
         else {
@@ -173,23 +169,18 @@ function fetchPoly(featureGroup=defaultGroup){
             geo.coordinates = testPolygon;
             inputObj.GeoMultipoly = geo;
         }
-        console.log("fetchpoly");
-        console.log(JSON.stringify(inputObj));
     }
 
     else{
         featureGroup.eachLayer(function (layer) {
 
             if (layer.toGeoJSON().type == "Feature") {
-                console.log("feature group if");
-                console.log(JSON.stringify(layer.toGeoJSON().geometry.coordinates[0]));
                 testPolygon.push(layer.toGeoJSON().geometry.coordinates[0]);
             } 
         });
         if (testPolygon.length == 1) {
             geo.type = "Polygon";
             geo.coordinates = testPolygon[0];
-            console.log("geo coordinate polygon : "+testPolygon[0]);
             inputObj.GeoPoly = geo;
         }
         else {
@@ -197,13 +188,11 @@ function fetchPoly(featureGroup=defaultGroup){
             geo.coordinates = testPolygon;
             inputObj.GeoMultipoly = geo;
         }
-        console.log("fetchpoly");
-        console.log(JSON.stringify(inputObj));
     }
     return inputObj;
 }
 
-function fetchHospitals(url,featureGroup=defaultGroup){
+function fetchHospitals(url,featureGroup=defaultGroup,polygon_name){
     featureGroup.eachLayer(function (layer) {
         if (layer.toGeoJSON().type == "Feature") {
             layer.setStyle({
@@ -215,11 +204,13 @@ function fetchHospitals(url,featureGroup=defaultGroup){
     });
 
     let poly = fetchPoly(featureGroup);
-    poly.polygon_name="lookup";
-    console.log("fetch hos poly : "+JSON.stringify(poly));
     hospitalLayerGroup.eachLayer(function (layer) {
         layer.addTo(mymap);
     });
+    if(polygon_name){
+        poly.polygon_name=polygon_name;
+    }
+
 
     let callback = function (datax) {
         for(let i=0; datax[i]; ++i){
@@ -247,6 +238,7 @@ function fetchHospitals(url,featureGroup=defaultGroup){
         });*/
     }
 }
+
     postData(poly,url,callback);
 
 }
@@ -277,12 +269,19 @@ function sendFormPost(form_type){
       closePolyModal();
    }
    else{
+
        clearHospitalLayers();
-       
+
        url=apiRoutes.Hospitals.getHospitalsInPolygon;
        
        closeHospitalPolygonModal();
-       fetchHospitals(url,value);
+       fetchHospitals(url,undefined,value["polygon_name"]);
+       defaultGroup.eachLayer(function (layer) {
+        if (layer.toGeoJSON().type == "Feature") {
+            defaultGroup.removeLayer(layer);
+        } 
+    });
+
    }
     clearInputFields();
 }
@@ -294,7 +293,6 @@ function postData(jdata,urlx,callback){
         }
     }
     jsondata=JSON.stringify(jdata);
-    console.log(jsondata);
     $.ajax({
         
             method: "POST",
@@ -316,22 +314,18 @@ function getHospitalsWithPolygons(){
             checkboxValues.push(checkboxList[i].value);
         }
     }
-    console.log(apiRoutes.Hospitals.getHospitalPolygons);
     $.ajax({
         type: "POST",
         url: apiRoutes.Hospitals.getHospitalPolygons,
         data: JSON.stringify(checkboxValues),
         contentType:'application/json'
       }).done(function(datax){
-          console.log("test");
           let url =apiRoutes.Hospitals.getHospitalsInPolygon;
           for(let i=0; datax[i]; i++){
-                console.log(datax[i]);
                 let polygon =datax[i].Geo.coordinates;
                 if(datax[i].Geo.type=="Polygon"){
                     let col = "red";
                     let reversed_polygon = drawPolygon(polygon,col,0.2);
-                    console.log(JSON.stringify("getHospitalsWithPolygons : "+JSON.stringify(reversed_polygon.GeoPoly)));
                     reversed_polygon.bindPopup("<b>Polygon name : </b>"+datax[i].polygon_name);
                     hospitalLayerGroup.addLayer(reversed_polygon);
                 }
@@ -341,12 +335,10 @@ function getHospitalsWithPolygons(){
                     for (let j = 0; j < polygon.length; j++) {
                         reversed_polygon = drawPolygon(polygon[j],col,0.2);
                         reversed_polygon.bindPopup("<b>Polygon name : </b>"+datax[i].polygon_name);
-                        console.log(JSON.stringify("getHospitalsWithPolygons : "+JSON.stringify(reversed_polygon.GeoMultipoly)));
                         hospitalLayerGroup.addLayer(reversed_polygon);
                     }
                 }
             }
-            
             fetchHospitals(apiRoutes.Hospitals.getHospitalsNoSave,hospitalLayerGroup);
 
       });

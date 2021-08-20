@@ -50,7 +50,7 @@ namespace mapService.Controllers
                 return BadRequest();
             }
 
-            return Ok(_hospitalServices.getHospitalsInPolygon(hospitalPolygonDto));
+            return Ok(_hospitalServices.getHospitalsInPolygonNoSave(hospitalPolygonDto));
         }
     }
 }

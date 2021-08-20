@@ -54,8 +54,12 @@ namespace mapService.Services
                 qs = "{ Geo: { $geoIntersects: { $geometry : " + hospitalPolygonDto.GeoPoly.ToJson() + " } } }";
             }
 
-            var res = _hospitals.Find(qs).ToList();
-            return res;
+            var res = _hospitals.Find(qs);
+            List<BsonDocument> res_to_send=new List<BsonDocument>();
+            if (res.Count() > 0) {
+                res_to_send=res.ToList();
+            }
+            return res_to_send;
         }
 
 
