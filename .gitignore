@@ -1,5 +1,7 @@
 package-lock.json
 
+.DStore
+
 redundant/
 
 node_modules/
